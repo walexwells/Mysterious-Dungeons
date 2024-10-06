@@ -1,0 +1,138 @@
+
+
+html {
+    font-family: "Josefin Sans", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: normal;
+    font-style: normal;
+}
+
+header {
+  display: block flex;
+  align-items: baseline;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+
+.grid {
+  border: solid 4px black;
+  margin: auto;
+  position: relative;
+  .tile {
+    position: absolute;
+  }
+}
+
+.tile {
+  box-sizing: border-box;
+  display: block flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dungeon-editor {
+
+  display: block flex;
+
+  .grid-container {
+
+    border: solid 4px black;
+    margin: auto;
+    position: relative;
+  }
+
+  .tile {
+    border: solid black 1px;
+  }
+  
+  .tile-picker {
+  
+    .tile-picker-record {
+      display: block flex;
+      align-items: center;
+    }
+  
+    .tile{
+      margin: 4px;
+    }
+
+    .selected {
+      outline: solid deepskyblue 3px;
+    }
+  }
+
+}
+
+
+.action-list {
+  display: block flex;
+  flex-direction: column;
+  max-height: 80vh;
+  flex-wrap: wrap;
+
+}
+
+button {
+  background-color: green;
+  border: none;
+  width: 150px;
+  margin: 10px;
+  padding: 4px;
+  box-shadow: 2px 2px 2px rgba(0, 0, 0, .5);
+  border-radius: 3px;
+  color: white;
+  font-weight: bold;
+  font-size: 1.2em;
+
+  &:hover {
+    position: relative;
+    top: -1px;
+    background-color: rgb(23, 145, 23);
+  }
+
+  &:active {
+    position: relative;
+    top: 2px;
+    box-shadow: none;
+  }
+}
+
+form {
+  font-size: 16px;
+
+  input {
+    font-size: 16px;
+    padding: 4px;
+  }
+}
+
+.backdrop {
+  position: fixed;
+  left: 0;
+  top: 0;
+  background-color: rgba(0, 0, 0, .5);
+  width: 100vw;
+  height: 100vh;
+  display: block flex;
+  align-items: center;
+  justify-content: center;
+  >*{
+    background-color: white;
+    box-shadow: 3px 3px 5px rgba(0, 0, 0, .5);
+    padding: 20px;
+    border-radius: 5px;
+  }
+}
+
+.game-runner-main-panel {
+  display: block flex;
+}
+
+.main-page-content{
+  display: block flex;
+  justify-content: center;
+}
