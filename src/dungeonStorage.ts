@@ -1,3 +1,4 @@
+import { defaultLevels } from "./defaultLevels";
 import { IDungeon } from "./editor/IDungeon";
 
 interface IDungeonDict {
@@ -20,31 +21,35 @@ export function saveDungeon(dungeon: IDungeon) {
     let i = 0;
     let name: string;
     do {
-      name = `Dungeon #${i++}`;
+      name = `Custom Dungeon ${i++}`;
     } while (name in dungeonDict);
     dungeon.name = name;
   }
-
   dungeonDict[getDungeonKey(dungeon.name)] = dungeon;
 
   save(dungeonDict);
+  return dungeon;
 }
 
-export function getDungeon(name?: string) {
-  if (name === undefined) return undefined;
+export function getDungeon(key?: string) {
+  if (key === undefined) return undefined;
+  if (key in defaultLevels) {
+    return defaultLevels[key];
+  }
   const dungeonDict = load();
-  debugger;
-  return dungeonDict[getDungeonKey(name)];
+  return dungeonDict[key];
 }
 
 export function getDungeonNames() {
   const dungeonDict = load();
-  return Object.keys(dungeonDict).map((k) => dungeonDict[k].name as string);
+  return [
+    ...Object.keys(defaultLevels).map((k) => defaultLevels[k].name as string),
+    ...Object.keys(dungeonDict).map((k) => dungeonDict[k].name as string),
+  ];
 }
 
-export function deleteDungeon(name: string) {
+export function deleteDungeon(key: string) {
   const dungeonDict = load();
-  const key = getDungeonKey(name);
   if (key in dungeonDict) {
     delete dungeonDict[key];
   }

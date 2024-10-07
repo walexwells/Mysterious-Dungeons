@@ -1,4 +1,4 @@
-import { gridCellSize, gridHeight, gridWidth } from "../constants";
+import { gridCellSize } from "../constants";
 import { getDungeon } from "../dungeonStorage";
 import { div } from "../libs/easy-dom/elements";
 import { defaultTile, Tile, tileList } from "../tileList";
@@ -7,40 +7,37 @@ import { IDungeon } from "./IDungeon";
 
 type IEditorGrid = HTMLDivElement & {
   getDungeonGrid(): IDungeon;
+  changeSize(x: number, y: number): void;
 };
+
+function getSavedOrDefaultDungeon(dungeonName?: string) {
+  const savedDungeon = getDungeon(dungeonName);
+  if (savedDungeon) {
+    return savedDungeon;
+  } else {
+    return {
+      width: 15,
+      height: 10,
+      cells: [],
+    };
+  }
+}
 
 export function EditorGrid(
   getTileFromPicker: () => Tile | undefined,
   initialDungeonName?: string
 ) {
-  const dungeon = getDungeon(initialDungeonName);
+  const dungeon = getSavedOrDefaultDungeon(initialDungeonName);
 
   const editorGrid = div({
-    className: "grid-container grid",
+    className: "grid",
     style: {
-      width: gridCellSize * gridWidth + "px",
-      height: gridCellSize * gridHeight + "px",
+      width: gridCellSize * dungeon.width + "px",
+      height: gridCellSize * dungeon.height + "px",
     },
   }) as IEditorGrid;
   let nextTileId = 0;
-  for (let y = 0; y < gridHeight; y++) {
-    for (let x = 0; x < gridWidth; x++) {
-      const tile =
-        (dungeon && tileList[dungeon.cells[nextTileId++]]) || defaultTile;
-
-      editorGrid.append(
-        EditorCell(
-          {
-            ...tile,
-            x,
-            y,
-          },
-          getTileFromPicker,
-          () => painting
-        )
-      );
-    }
-  }
+  createCells();
 
   let painting = false;
 
@@ -78,8 +75,8 @@ export function EditorGrid(
 
   editorGrid.getDungeonGrid = () => {
     return {
-      width: gridWidth,
-      height: gridHeight,
+      width: dungeon.width,
+      height: dungeon.height,
       cells: Array.from(editorGrid.querySelectorAll(".tile")).map(
         (cell: Element) => {
           if (!isEditorCell(cell)) {
@@ -91,5 +88,41 @@ export function EditorGrid(
     };
   };
 
+  editorGrid.changeSize = (x, y) => {
+    dungeon.width += x;
+    dungeon.height += y;
+    clearCells();
+    createCells();
+  };
+
   return editorGrid;
+
+  function clearCells() {
+    while (editorGrid.firstChild) {
+      editorGrid.firstChild.remove();
+    }
+  }
+
+  function createCells() {
+    editorGrid.style.width = gridCellSize * dungeon.width + "px";
+    editorGrid.style.height = gridCellSize * dungeon.height + "px";
+
+    for (let y = 0; y < dungeon.height; y++) {
+      for (let x = 0; x < dungeon.width; x++) {
+        const tile =
+          (dungeon && tileList[dungeon.cells[nextTileId++]]) || defaultTile;
+        editorGrid.append(
+          EditorCell(
+            {
+              ...tile,
+              x,
+              y,
+            },
+            getTileFromPicker,
+            () => painting
+          )
+        );
+      }
+    }
+  }
 }

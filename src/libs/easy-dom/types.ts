@@ -1,5 +1,5 @@
 import { ContextValueType, UnknownContext } from "./context";
-import { DocumentEvent, HTMLElementEventMap } from "./DocumentEvent";
+import { DocumentEvent } from "./DocumentEvent";
 
 export interface IDynamic<T> {
   onChange(listener: (value: T) => void): () => void;

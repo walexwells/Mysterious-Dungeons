@@ -5,9 +5,9 @@ import { div, h2 } from "../libs/easy-dom/elements";
 import { GameGrid } from "./GameGrid";
 
 export function DungeonPage(dungeonName: string) {
-  debugger;
   const dungeon = getDungeon(dungeonName);
   if (!dungeon) {
+    debugger;
     location.assign("#/");
     return new Text("Error");
   }
@@ -20,6 +20,7 @@ export function DungeonPage(dungeonName: string) {
       div(
         { className: "game-runner-left-panel" },
         ActionList({
+          Restart: () => location.reload(),
           Exit: () => location.assign("#/"),
         })
       )

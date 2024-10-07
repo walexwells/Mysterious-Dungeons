@@ -1,14 +1,12 @@
-import { deleteDungeon, getDungeonKey, saveDungeon } from "../dungeonStorage";
-import { Header } from "../Header";
 import {
-  button,
-  div,
-  form,
-  h2,
-  h3,
-  input,
-  label,
-} from "../libs/easy-dom/elements";
+  deleteDungeon,
+  getDungeon,
+  getDungeonKey,
+  saveDungeon,
+} from "../dungeonStorage";
+import { getDungeonStr } from "../dungeonStr";
+import { Header } from "../Header";
+import { div, form, h2, input, label } from "../libs/easy-dom/elements";
 import { openPrompt } from "../prompt";
 import { selectDungeon } from "../selectDungeon";
 import { ActionList } from "./ActionList";
@@ -16,9 +14,10 @@ import { EditorGrid } from "./EditorGrid";
 import { TilePicker } from "./TilePicker";
 
 export function EditorPage(initialDungeonName?: string) {
-  const pickerEl = TilePicker();
+  const dungeon = getDungeon(initialDungeonName);
 
-  const nameForm = DungeonNameForm(initialDungeonName);
+  const pickerEl = TilePicker();
+  const nameForm = DungeonNameForm(dungeon?.name);
   const leftPanel = div({ className: "editor-left-panel" }, nameForm, pickerEl);
 
   function getTileFromPicker() {
@@ -31,14 +30,19 @@ export function EditorPage(initialDungeonName?: string) {
     return (new FormData(nameForm).get("dungeonName") as string).trim();
   }
 
+  function setDungeonName(value: string) {
+    nameForm.querySelector("input")!.value = value;
+  }
+
   function save() {
     const dungeonGrid = dungeonEditorGridEl.getDungeonGrid();
     const dungeonName = getDungeonName();
     if (dungeonGrid && dungeonName) {
       dungeonGrid.name = dungeonName;
     }
-    saveDungeon(dungeonGrid);
-    return dungeonName;
+    const savedDungeon = saveDungeon(dungeonGrid);
+    setDungeonName(savedDungeon.name || "");
+    return savedDungeon;
   }
 
   const DungeonEditor = div(
@@ -46,12 +50,12 @@ export function EditorPage(initialDungeonName?: string) {
     div(
       { className: "dungeon-editor" },
       leftPanel,
-      dungeonEditorGridEl,
+      div(dungeonEditorGridEl),
       ActionList({
         "Save & Play": () => {
-          const name = save();
-          if (name) {
-            location.assign(`#/dungeon/${getDungeonKey(name)}`);
+          const dungeon = save();
+          if (dungeon.name) {
+            location.assign(`#/dungeon/${getDungeonKey(dungeon.name)}`);
           }
         },
         Load: async () => {
@@ -61,28 +65,40 @@ export function EditorPage(initialDungeonName?: string) {
           }
         },
         Save: () => {
-          save();
+          const dungeon = save();
+          if (dungeon.name) {
+            location.assign("#/edit/" + getDungeonKey(dungeon.name));
+          }
         },
         Delete: async () => {
-          const result = await openPrompt<boolean>((resolve) =>
-            div(
-              h3("Are you sure you want to delete this dungeon?"),
-              div(
-                button({ onclick: () => resolve(false) }, "Cancel"),
-                button(
-                  {
-                    style: { backgroundColor: "red" },
-                    onclick: () => resolve(true),
-                  },
-                  "Delete"
-                )
-              )
-            )
-          );
+          const result = await openPrompt<boolean>({
+            message: "Are you sure you want to delete this dungeon?",
+            options: [
+              { label: "Cancel", value: false },
+              { label: "Delete", value: true, color: "red" },
+            ],
+          });
           if (result) {
-            deleteDungeon(getDungeonName());
+            deleteDungeon(getDungeonKey(getDungeonName()));
             location.assign(`#/`);
           }
+        },
+        "Get Share Code": () => {
+          const d = save();
+          const shareStr = getDungeonStr(d);
+          openPrompt<null>(() => div({ className: "share-code" }, shareStr));
+        },
+        "Add Row": () => {
+          dungeonEditorGridEl.changeSize(0, 1);
+        },
+        "Remove Row": () => {
+          dungeonEditorGridEl.changeSize(0, -1);
+        },
+        "Add Column": () => {
+          dungeonEditorGridEl.changeSize(1, 0);
+        },
+        "Remove Column": () => {
+          dungeonEditorGridEl.changeSize(-1, 0);
         },
         "Exit Editor": () => {
           location.assign(`#/`);

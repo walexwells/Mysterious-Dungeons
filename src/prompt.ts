@@ -1,7 +1,18 @@
-import { div } from "./libs/easy-dom/elements";
+import { button, div } from "./libs/easy-dom/elements";
+
+interface PromptConfig<T> {
+  message: string;
+  options: {
+    label: string;
+    value: T;
+    color?: string;
+  }[];
+}
+
+type PromptFunction<T> = (resolve: (v: T | null) => void) => HTMLElement;
 
 export function openPrompt<T>(
-  promptFunction: (resolve: (v: T | null) => void) => HTMLElement
+  config: PromptConfig<T> | PromptFunction<T>
 ): Promise<T | null> {
   return new Promise<T | null>((resolvePromise) => {
     function resolvePrompt(v: T | null) {
@@ -9,7 +20,8 @@ export function openPrompt<T>(
       backdrop.remove();
     }
 
-    const promptEl = promptFunction(resolvePrompt);
+    const promptEl = promptBody(config, resolvePrompt);
+
     promptEl.addEventListener("click", (e) => e.stopPropagation());
 
     const backdrop = div(
@@ -18,5 +30,38 @@ export function openPrompt<T>(
     );
 
     document.body.appendChild(backdrop);
+  });
+}
+
+function promptBody<T>(
+  config: PromptConfig<T> | PromptFunction<T>,
+  resolve: (v: T | null) => void
+) {
+  if (typeof config === "function") {
+    return config(resolve);
+  } else {
+    return div(
+      div(config.message),
+      div(
+        config.options.map((o) =>
+          button(
+            {
+              style: {
+                backgroundColor: o.color,
+              },
+              onclick: () => resolve(o.value),
+            },
+            o.label
+          )
+        )
+      )
+    );
+  }
+}
+
+export function openAlert(message: string) {
+  return openPrompt({
+    message,
+    options: [{ label: "OK", value: null }],
   });
 }
