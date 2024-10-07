@@ -1,4 +1,4 @@
-import { gridCellSize, gridWidth, gridHeight } from "../constants";
+import { gridCellSize } from "../constants";
 import { IDungeon } from "../editor/IDungeon";
 import { button, div, h3 } from "../libs/easy-dom/elements";
 import { openPrompt } from "../prompt";
@@ -9,8 +9,8 @@ export function GameGrid(dungeon: IDungeon) {
   const gameGrid = div({
     className: "grid",
     style: {
-      width: gridCellSize * gridWidth + "px",
-      height: gridCellSize * gridHeight + "px",
+      width: gridCellSize * dungeon.width + "px",
+      height: gridCellSize * dungeon.height + "px",
     },
     onDocumentDisconnect: removeListeners,
   });
@@ -23,8 +23,8 @@ export function GameGrid(dungeon: IDungeon) {
 
   const cells: IGameCell[] = [];
 
-  for (let y = 0; y < gridHeight; y++) {
-    for (let x = 0; x < gridWidth; x++) {
+  for (let y = 0; y < dungeon.height; y++) {
+    for (let x = 0; x < dungeon.width; x++) {
       const tile = tiles.shift() as GridTile;
       tile.x = x;
       tile.y = y;
@@ -43,9 +43,7 @@ export function GameGrid(dungeon: IDungeon) {
   async function moveTo(x: number, y: number) {
     const targetCell = cells.find((c) => c.tile.x === x && c.tile.y === y);
     if (targetCell && !targetCell.tile.barrier) {
-      occupiedCell.draw(false);
       occupiedCell = targetCell;
-      occupiedCell.draw(true);
 
       if (
         occupiedCell.tile.behavior === "item" &&
@@ -116,12 +114,10 @@ export function GameGrid(dungeon: IDungeon) {
     } else if (targetCell?.tile.behavior === "door") {
       if (targetCell.tile.symbol === "locked" && keyCount > 0) {
         targetCell.tile.symbol = undefined;
-        targetCell.draw(false);
         keyCount--;
       } else if (!targetCell.tile.symbol) {
         targetCell.tile.barrier = false;
         targetCell.tile.backgroundColor = "chocolate";
-        targetCell.draw(false);
       }
     }
   }
@@ -146,7 +142,8 @@ export function GameGrid(dungeon: IDungeon) {
       event.preventDefault();
       event.stopPropagation();
       gameActions[event.key]();
-      applyVisibility();
+      applyVisibility(occupiedCell.tile.x,occupiedCell.tile.y, getTile);
+      draw();
     }
   }
 
@@ -156,23 +153,16 @@ export function GameGrid(dungeon: IDungeon) {
 
   document.addEventListener("keydown", keydownListener);
 
-  function applyVisibility() {
-    occupiedCell.tile.observed = true;
-    occupiedCell.draw(true);
-    directions.forEach((d) => look(occupiedCell!, d));
+
+  function getTile(x:number,y:number){
+    return cells.find(c => c.tile.x === x && c.tile.y === y)?.tile || ({...defaultTile, x, y}as GridTile)
   }
 
-  applyVisibility();
-
-  function look(cell: IGameCell, direction: Direction) {
-    const [x, y] = direction(cell.tile.x, cell.tile.y);
-    const nextCell = cells.find((c) => c.tile.x === x && c.tile.y === y);
-    if (nextCell) {
-      nextCell.tile.observed = true;
-      nextCell.draw(false);
-      if (!nextCell.tile.opaque) {
-        look(nextCell, direction);
-      }
+  applyVisibility(occupiedCell.tile.x, occupiedCell.tile.y, getTile);
+  draw()
+  function draw(){
+    for(const cell of cells){
+      cell.draw(cell === occupiedCell);
     }
   }
 
@@ -187,3 +177,125 @@ const directions: Direction[] = [
   (x: number, y: number) => [x, y + 1],
   (x: number, y: number) => [x - 1, y],
 ];
+
+function look(tile: GridTile, direction: Direction, getTile: (x:number,y:number)=>GridTile) {
+  const [x, y] = direction(tile.x, tile.y);
+  const nextTile = getTile(x,y)
+  
+  nextTile.observed = true;
+  if (!tile.opaque) {
+    look(nextTile, direction, getTile);
+  }
+}
+
+
+function applyVisibility(x: number, y:number, getTile: (x:number,y:number)=>GridTile){
+  applyVisibilityNew(x,y,getTile)
+  // const tile = getTile(x,y)
+  // tile.observed = true;
+  // directions.forEach((d) => look(tile, d, getTile));
+}
+
+
+
+function applyVisibilitySegment(x:number, y:number, tx:number, ty:number, getTile: (x:number,y:number)=>GridTile){
+  const t1 = getTile(x+(1*tx), y)
+  const t2 = getTile(x+(2*tx), y)
+  const t3 = getTile(x+(3*tx), y)
+  t1.observed = true
+  if(!t1.opaque){
+    t2.observed = true
+  }
+  if(!t1.opaque && !t2.opaque){
+    t3.observed = true
+  }
+}
+
+
+
+
+
+function applyVisibilityNew(x:number,y:number, getTile: (x:number,y:number)=>GridTile){
+
+  const tile = getTile(x,y)
+  tile.observed = true;
+
+  applyVisibilitySegment2((dx:number,dy:number)=>{
+    return getTile(x+dx,y+dy)
+  }, )
+
+  applyVisibilitySegment2((dx:number,dy:number)=>{
+    return getTile(x-dx,y-dy)
+  })
+
+  applyVisibilitySegment2((dx:number,dy:number)=>{
+    return getTile(x+dx,y-dy)
+  })
+
+  applyVisibilitySegment2((dx:number,dy:number)=>{
+    return getTile(x-dx,y+dy)
+  })
+
+}
+
+
+
+function applyVisibilitySegment2(getTile: (x:number, y:number)=>GridTile){
+
+  /*
+
+  t00, t10, t20, t30
+  t01, t11, t21, t31
+  t02, t12, t23, t33
+  t03, t13, t23, t33
+
+  */
+
+
+  //const t00 = getTile(0,0)
+  const t10 = getTile(1,0)
+  const t20 = getTile(2,0)
+  const t30 = getTile(3,0)
+  
+  const t01 = getTile(0,1)
+  const t11 = getTile(1,1)
+  const t21 = getTile(2,1)
+  const t31 = getTile(3,1)
+
+  const t02 = getTile(0,2)
+  const t12 = getTile(1,2)
+  const t22 = getTile(2,2)
+  // const t32 = getTile(3,2)
+
+  const t03 = getTile(0,3)
+  const t13 = getTile(1,3)
+  // const t23 = getTile(2,3)
+  // const t33 = getTile(3,3)
+
+  const t = (v:GridTile)=>!v.opaque
+  const observeIf = (v:GridTile, b:boolean)=>{
+    if(b){
+      v.observed = true
+    }
+  }
+
+  // observeIf(t00, true)
+  observeIf(t10, true)
+  observeIf(t20, t(t10))
+  observeIf(t30, t(t10) && t(t20))
+
+  observeIf(t01, true)
+  observeIf(t11, t(t01) || t(t10))
+  observeIf(t21, t(t10) && t(t11))
+  observeIf(t31, t(t10) && t(t21) && (t(t11) || t(t20)) )
+
+  observeIf(t02, t(t01))
+  observeIf(t12, t(t01) && t(t11))
+  observeIf(t22, t(t11) && (t(t01) && t(t12)) || (t(t10) && t(t21)))
+
+  observeIf(t03, t(t01) && t(t02))
+  observeIf(t13, t(t01) && t(t12) && (t(t11) || t(t02)))
+
+
+
+}

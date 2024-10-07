@@ -20,11 +20,11 @@ a {
 
 .grid {
   border: solid 4px black;
-  margin: auto;
   position: relative;
   .tile {
     position: absolute;
   }
+  overflow: auto;
 }
 
 .tile {
@@ -37,13 +37,6 @@ a {
 .dungeon-editor {
 
   display: block flex;
-
-  .grid-container {
-
-    border: solid 4px black;
-    margin: auto;
-    position: relative;
-  }
 
   .tile {
     border: solid black 1px;
@@ -65,6 +58,10 @@ a {
     }
   }
 
+  >*:nth-child(2){
+    flex: auto;
+    margin: 1em;
+  }
 }
 
 

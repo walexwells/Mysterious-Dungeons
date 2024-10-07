@@ -11,6 +11,7 @@ export const tileSymbols = {
   teleportTarget: "◉",
   key: "🗝",
   fog: "🌫️",
+  carrot: '🥕'
 };
 export type TileSymbol = keyof typeof tileSymbols;
 
@@ -147,5 +148,11 @@ export const tileList: Readonly<Readonly<Tile>[]> = Object.freeze(
       symbol: "fog",
       opaque: true,
     } as Tile,
+    {
+      id: 16,
+      label: "Carrot",
+      symbol: "carrot",
+      behavior: "item"
+    } as Tile
   ].map((x) => Object.freeze(x))
 );

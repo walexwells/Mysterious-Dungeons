@@ -1,4 +1,4 @@
-import { gridCellSize, gridHeight, gridWidth } from "../constants";
+import { gridCellSize } from "../constants";
 import { getDungeon } from "../dungeonStorage";
 import { div } from "../libs/easy-dom/elements";
 import { defaultTile, Tile, tileList } from "../tileList";
@@ -9,22 +9,36 @@ type IEditorGrid = HTMLDivElement & {
   getDungeonGrid(): IDungeon;
 };
 
+
+function getSavedOrDefaultDungeon(dungeonName?:string){
+  const savedDungeon = getDungeon(dungeonName);
+  if(savedDungeon){
+    return savedDungeon
+  } else {
+    return {
+      width: 15,
+      height: 10,
+      cells: []
+    }
+  }
+}
+
 export function EditorGrid(
   getTileFromPicker: () => Tile | undefined,
   initialDungeonName?: string
 ) {
-  const dungeon = getDungeon(initialDungeonName);
+  const dungeon = getSavedOrDefaultDungeon(initialDungeonName);
 
   const editorGrid = div({
     className: "grid-container grid",
     style: {
-      width: gridCellSize * gridWidth + "px",
-      height: gridCellSize * gridHeight + "px",
+      width: gridCellSize * dungeon.width + "px",
+      height: gridCellSize * dungeon.height + "px",
     },
   }) as IEditorGrid;
   let nextTileId = 0;
-  for (let y = 0; y < gridHeight; y++) {
-    for (let x = 0; x < gridWidth; x++) {
+  for (let y = 0; y < dungeon.height; y++) {
+    for (let x = 0; x < dungeon.width; x++) {
       const tile =
         (dungeon && tileList[dungeon.cells[nextTileId++]]) || defaultTile;
 
@@ -78,8 +92,8 @@ export function EditorGrid(
 
   editorGrid.getDungeonGrid = () => {
     return {
-      width: gridWidth,
-      height: gridHeight,
+      width: dungeon.width,
+      height: dungeon.height,
       cells: Array.from(editorGrid.querySelectorAll(".tile")).map(
         (cell: Element) => {
           if (!isEditorCell(cell)) {

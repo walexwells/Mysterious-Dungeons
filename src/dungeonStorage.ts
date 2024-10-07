@@ -20,20 +20,20 @@ export function saveDungeon(dungeon: IDungeon) {
     let i = 0;
     let name: string;
     do {
-      name = `Dungeon #${i++}`;
+      name = `Custom Dungeon ${i++}`;
     } while (name in dungeonDict);
     dungeon.name = name;
   }
-
+  console.log(dungeon)
   dungeonDict[getDungeonKey(dungeon.name)] = dungeon;
 
   save(dungeonDict);
+  return dungeon.name
 }
 
 export function getDungeon(name?: string) {
   if (name === undefined) return undefined;
   const dungeonDict = load();
-  debugger;
   return dungeonDict[getDungeonKey(name)];
 }
 

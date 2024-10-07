@@ -37,8 +37,7 @@ export function EditorPage(initialDungeonName?: string) {
     if (dungeonGrid && dungeonName) {
       dungeonGrid.name = dungeonName;
     }
-    saveDungeon(dungeonGrid);
-    return dungeonName;
+    return saveDungeon(dungeonGrid);
   }
 
   const DungeonEditor = div(
@@ -46,7 +45,7 @@ export function EditorPage(initialDungeonName?: string) {
     div(
       { className: "dungeon-editor" },
       leftPanel,
-      dungeonEditorGridEl,
+      div(dungeonEditorGridEl),
       ActionList({
         "Save & Play": () => {
           const name = save();
@@ -61,7 +60,8 @@ export function EditorPage(initialDungeonName?: string) {
           }
         },
         Save: () => {
-          save();
+          const name = save();
+          location.assign("#/edit/" + getDungeonKey(name));
         },
         Delete: async () => {
           const result = await openPrompt<boolean>((resolve) =>
@@ -87,9 +87,25 @@ export function EditorPage(initialDungeonName?: string) {
         "Exit Editor": () => {
           location.assign(`#/`);
         },
+        "Add Row": ()=>{ChangeSize(0,1)},
+        "Remove Row": ()=>{ChangeSize(0,-1)},
+        "Add Column": ()=>{ChangeSize(1,0)},
+        "Remove Column":()=>{ChangeSize(-1,0)}
       })
     )
   );
+
+  function ChangeSize(dw:number, dh:number){
+    const dungeonGrid = dungeonEditorGridEl.getDungeonGrid();
+    dungeonGrid.width += dw;
+    dungeonGrid.height += dh;
+
+    const parent = dungeonEditorGridEl
+
+    const newGrid = EditorGrid(getTileFromPicker, dungeonGrid.name);
+    parent.insertBefore(newGrid, dungeonEditorGridEl);
+    dungeonEditorGridEl.remove(); 
+  }
 
   return DungeonEditor;
 }

@@ -5,7 +5,7 @@ import { div, h2 } from "../libs/easy-dom/elements";
 import { GameGrid } from "./GameGrid";
 
 export function DungeonPage(dungeonName: string) {
-  debugger;
+  
   const dungeon = getDungeon(dungeonName);
   if (!dungeon) {
     location.assign("#/");
