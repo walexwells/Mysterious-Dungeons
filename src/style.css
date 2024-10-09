@@ -43,7 +43,12 @@ a {
   }
   
   .tile-picker {
-  
+
+    display: block flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    max-height: 80vh;
+
     .tile-picker-record {
       display: block flex;
       align-items: center;
@@ -137,4 +142,10 @@ form {
 .share-code {
   word-break: break-all;
   max-width: 80vw;
+}
+
+.hud {
+  margin-top: .5em;
+  display: block flex;
+  justify-content: space-between;
 }

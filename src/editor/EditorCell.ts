@@ -31,7 +31,7 @@ export function EditorCell(
       y,
       ...newTile,
     } as GridTile;
-    drawTile(editorCell, newTile, false, true);
+    drawTile(editorCell, newTile, true);
   };
 
   function paint() {
@@ -40,7 +40,7 @@ export function EditorCell(
       editorCell.setTile(tile);
     }
   }
-  drawTile(editorCell, tile, false, true);
+  drawTile(editorCell, tile, true);
   return editorCell;
 }
 

@@ -11,6 +11,7 @@ export const tileSymbols = {
   teleportTarget: "◉",
   key: "🗝",
   fog: "🌫️",
+  movingWall: "▦",
 };
 export type TileSymbol = keyof typeof tileSymbols;
 
@@ -23,7 +24,7 @@ export interface Tile {
     | "item"
     | "door"
     | "button"
-    | "vanishingWall"
+    | "movingWall"
     | "teleporter"
     | "teleportTarget";
   opaque?: boolean;
@@ -32,6 +33,7 @@ export interface Tile {
   symbol?: TileSymbol;
   editorSymbol?: TileSymbol;
   variantColor?: string;
+  observed?: boolean;
 }
 export interface GridTile extends Tile {
   x: number;
@@ -146,6 +148,33 @@ export const tileList: Readonly<Readonly<Tile>[]> = Object.freeze(
       label: "Fog",
       symbol: "fog",
       opaque: true,
+    } as Tile,
+    {
+      id: 16,
+      label: "Proximity Button",
+      editorSymbol: "button",
+      variantColor: "pink",
+      behavior: "button",
+    } as Tile,
+    {
+      id: 17,
+      label: "Closed Moving Wall",
+      barrier: true,
+      opaque: true,
+      editorSymbol: "movingWall",
+      variantColor: "pink",
+      backgroundColor: "#222",
+      behavior: "movingWall",
+    } as Tile,
+    {
+      id: 18,
+      label: "Open Moving Wall",
+      barrier: false,
+      opaque: false,
+      editorSymbol: "movingWall",
+      variantColor: "pink",
+      backgroundColor: "white",
+      behavior: "movingWall",
     } as Tile,
   ].map((x) => Object.freeze(x))
 );

@@ -1,36 +1,14 @@
 import { gridCellSize } from "../data/constants";
 import { div } from "../libs/easy-dom/elements";
-import { GridTile, Tile } from "../data/tileList";
-import { drawTile } from "../utils/drawTile";
 
-export type IGameCell = HTMLDivElement & {
-  tile: GridTile;
-  draw(occupied: boolean): void;
-};
-
-const unknownTile = {
-  backgroundColor: "lightgray",
-} as Tile;
-
-export function GameCell(tile: GridTile) {
-  const gridCell = div({
+export function GameCell(x: number, y: number) {
+  return div({
     className: "tile",
     style: {
       width: gridCellSize + "px",
       height: gridCellSize + "px",
-      top: tile.y * gridCellSize + "px",
-      left: tile.x * gridCellSize + "px",
+      top: y * gridCellSize + "px",
+      left: x * gridCellSize + "px",
     },
-  }) as IGameCell;
-
-  gridCell.tile = tile;
-  gridCell.draw = (occupied: boolean) => {
-    if (tile.observed) {
-      drawTile(gridCell, tile, occupied);
-    } else {
-      drawTile(gridCell, unknownTile, false);
-    }
-  };
-  gridCell.draw(tile.behavior === "start");
-  return gridCell;
+  });
 }

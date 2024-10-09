@@ -36,7 +36,7 @@ function PickerTile(tile: Tile) {
       height: gridCellSize + "px",
     },
   });
-  drawTile(tileEl, tile, false, true);
+  drawTile(tileEl, tile, true);
   return tileEl;
 }
 
