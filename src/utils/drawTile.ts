@@ -1,4 +1,4 @@
-import { Tile, tileSymbols } from "./tileList";
+import { Tile, tileSymbols } from "../data/tileList";
 
 export function drawTile(
   el: HTMLElement,

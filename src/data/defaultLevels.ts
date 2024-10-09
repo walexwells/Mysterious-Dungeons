@@ -1,4 +1,4 @@
-import { IDungeon } from "./editor/IDungeon";
+import { IDungeon } from "../editor/IDungeon";
 
 export const defaultLevels: {
   [key: string]: IDungeon;

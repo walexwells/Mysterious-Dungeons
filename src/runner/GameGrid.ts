@@ -1,8 +1,8 @@
-import { gridCellSize } from "../constants";
+import { gridCellSize } from "../data/constants";
 import { IDungeon } from "../editor/IDungeon";
 import { button, div, h3 } from "../libs/easy-dom/elements";
-import { openPrompt } from "../prompt";
-import { defaultTile, GridTile, tileList } from "../tileList";
+import { openPrompt } from "../utils/prompt";
+import { defaultTile, GridTile, tileList } from "../data/tileList";
 import { GameCell, IGameCell } from "./GameCell";
 
 export function GameGrid(dungeon: IDungeon) {

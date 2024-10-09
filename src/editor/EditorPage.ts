@@ -3,12 +3,12 @@ import {
   getDungeon,
   getDungeonKey,
   saveDungeon,
-} from "../dungeonStorage";
-import { getDungeonStr } from "../dungeonStr";
-import { Header } from "../Header";
+} from "../data/dungeonStorage";
+import { getDungeonStr } from "../data/dungeonStr";
+import { Header } from "../utils/Header";
 import { div, form, h2, input, label } from "../libs/easy-dom/elements";
-import { openPrompt } from "../prompt";
-import { selectDungeon } from "../selectDungeon";
+import { openPrompt } from "../utils/prompt";
+import { selectDungeon } from "../menu/selectDungeon";
 import { ActionList } from "./ActionList";
 import { EditorGrid } from "./EditorGrid";
 import { TilePicker } from "./TilePicker";

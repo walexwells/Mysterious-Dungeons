@@ -1,6 +1,6 @@
-import { getDungeonNames } from "./dungeonStorage";
-import { Actions, ActionList } from "./editor/ActionList";
-import { openPrompt } from "./prompt";
+import { getDungeonNames } from "../data/dungeonStorage";
+import { Actions, ActionList } from "../editor/ActionList";
+import { openPrompt } from "../utils/prompt";
 
 export function selectDungeon() {
   return openPrompt<string>((resolve) => {

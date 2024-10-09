@@ -1,4 +1,4 @@
-import { IDungeon } from "./editor/IDungeon";
+import { IDungeon } from "../editor/IDungeon";
 import { base64decode, base64encode } from "./base64";
 
 function dungeonAsBytes(dungeon: IDungeon) {

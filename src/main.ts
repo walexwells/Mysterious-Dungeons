@@ -4,7 +4,7 @@ import "./style.css";
 import { div } from "./libs/easy-dom/elements";
 import { HashNavigation } from "./libs/easy-dom/HashNavigation";
 import { Router } from "./libs/easy-dom/Router";
-import { MainPage } from "./MainPage";
+import { MainPage } from "./menu/MainPage";
 
 const appEl = document.querySelector<HTMLDivElement>("#app")!;
 

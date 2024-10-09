@@ -1,7 +1,7 @@
-import { gridCellSize } from "../constants";
-import { getDungeon } from "../dungeonStorage";
+import { gridCellSize } from "../data/constants";
+import { getDungeon } from "../data/dungeonStorage";
 import { div } from "../libs/easy-dom/elements";
-import { defaultTile, Tile, tileList } from "../tileList";
+import { defaultTile, Tile, tileList } from "../data/tileList";
 import { EditorCell, isEditorCell } from "./EditorCell";
 import { IDungeon } from "./IDungeon";
 

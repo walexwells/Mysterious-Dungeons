@@ -1,5 +1,5 @@
 import { defaultLevels } from "./defaultLevels";
-import { IDungeon } from "./editor/IDungeon";
+import { IDungeon } from "../editor/IDungeon";
 
 interface IDungeonDict {
   [key: string]: IDungeon;

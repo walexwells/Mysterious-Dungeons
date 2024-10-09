@@ -1,6 +1,6 @@
-import { getDungeon } from "../dungeonStorage";
+import { getDungeon } from "../data/dungeonStorage";
 import { ActionList } from "../editor/ActionList";
-import { Header } from "../Header";
+import { Header } from "../utils/Header";
 import { div, h2 } from "../libs/easy-dom/elements";
 import { GameGrid } from "./GameGrid";
 

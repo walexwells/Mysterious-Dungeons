@@ -1,7 +1,7 @@
-import { gridCellSize } from "../constants";
-import { drawTile } from "../drawTile";
+import { gridCellSize } from "../data/constants";
 import { div } from "../libs/easy-dom/elements";
-import { GridTile, Tile } from "../tileList";
+import { GridTile, Tile } from "../data/tileList";
+import { drawTile } from "../utils/drawTile";
 
 export type IGameCell = HTMLDivElement & {
   tile: GridTile;

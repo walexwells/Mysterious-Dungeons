@@ -1,9 +1,9 @@
-import { getDungeonKey, saveDungeon } from "./dungeonStorage";
-import { getDungeonFromStr } from "./dungeonStr";
-import { ActionList } from "./editor/ActionList";
-import { Header } from "./Header";
-import { button, div, input, label } from "./libs/easy-dom/elements";
-import { openAlert, openPrompt } from "./prompt";
+import { getDungeonKey, saveDungeon } from "../data/dungeonStorage";
+import { getDungeonFromStr } from "../data/dungeonStr";
+import { ActionList } from "../editor/ActionList";
+import { button, div, input, label } from "../libs/easy-dom/elements";
+import { Header } from "../utils/Header";
+import { openAlert, openPrompt } from "../utils/prompt";
 import { selectDungeon } from "./selectDungeon";
 
 export function MainPage() {

@@ -1,4 +1,4 @@
-import { button, div } from "./libs/easy-dom/elements";
+import { button, div } from "../libs/easy-dom/elements";
 
 interface PromptConfig<T> {
   message: string;

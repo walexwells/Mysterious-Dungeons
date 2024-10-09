@@ -1,6 +1,6 @@
 import { describe, expect, test } from "vitest";
 import { getDungeonFromStr, getDungeonStr } from "./dungeonStr";
-import { IDungeon } from "./editor/IDungeon";
+import { IDungeon } from "../editor/IDungeon";
 
 describe("data", () => {
   test("dungeon to url form and back", async () => {
