@@ -39,8 +39,8 @@ export function MainPage() {
                       resolve(null);
                       try {
                         const dungeon = getDungeonFromStr(inputEl.value);
-                        const name = saveDungeon(dungeon);
-                        openAlert(`Import Successful: ${name}`);
+                        const saved = saveDungeon(dungeon);
+                        openAlert(`Import Successful: ${saved.name}`);
                       } catch (err) {
                         openAlert("Import Failed");
                       }
