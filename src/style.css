@@ -149,3 +149,48 @@ form {
   display: block flex;
   justify-content: space-between;
 }
+
+.touch-mode .touch-controls{
+  display: block;
+}
+
+.touch-controls {
+  
+  display: none;
+ 
+  position: fixed;
+  bottom: 0;
+  right: 0;
+
+
+  >div {
+    display: block flex;
+    justify-content: center;
+  }
+
+  .arrowButton {
+    display: block flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 10vmin;
+    border-radius: 20px;
+    border: inset black 10px;
+    margin: 4px;
+    background-color: #777;
+    color: white;
+    cursor: pointer;
+    line-height: 0;
+    width: 15vmin;
+    height: 15vmin;
+
+    &:hover {
+      position: relative;
+      bottom: 1px;
+    }
+
+    &:active {
+      position: relative;
+      top: 4px;
+    }
+  }
+}

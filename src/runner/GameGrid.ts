@@ -32,7 +32,8 @@ export function GameGrid(dungeon: IDungeon) {
       onDocumentDisconnect: removeListeners,
     },
     ...cells,
-    playerEl
+    playerEl,
+    TouchControls(doAction)
   );
 
   const totalTreasure = gameState.tiles.filter(
@@ -112,11 +113,20 @@ export function GameGrid(dungeon: IDungeon) {
     }
   }
 
+  function touchListener(event: TouchEvent) {
+    console.log(event);
+    gameGrid.classList.add("touch-mode");
+    document.removeEventListener("touchstart", touchListener);
+  }
+
   function removeListeners() {
     document.removeEventListener("keydown", keydownListener);
+    document.removeEventListener("touchstart", touchListener);
   }
 
   document.addEventListener("keydown", keydownListener);
+
+  document.addEventListener("touchstart", touchListener);
 
   return div(
     gameGrid,
@@ -124,6 +134,35 @@ export function GameGrid(dungeon: IDungeon) {
       { className: "hud" },
       div("Keys: ", keyCount),
       div(" Remaining Treasure: ", remainingTreasure)
+    )
+  );
+}
+
+function TouchControls(doAction: (action: GameAction) => void) {
+  return div(
+    { className: "touch-controls" },
+    div(
+      div(
+        {
+          className: "arrowButton up",
+          onClick: () => doAction("up"),
+        },
+        "↑"
+      )
+    ),
+    div(
+      div(
+        { className: "arrowButton left", onClick: () => doAction("left") },
+        "←"
+      ),
+      div(
+        { className: "arrowButton down", onClick: () => doAction("down") },
+        "↓"
+      ),
+      div(
+        { className: "arrowButton right", onClick: () => doAction("right") },
+        "→"
+      )
     )
   );
 }
