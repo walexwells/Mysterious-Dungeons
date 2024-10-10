@@ -1,27 +1,39 @@
 import { gridCellSize } from "../data/constants";
 import { tileSymbols } from "../data/tileList";
 import { div } from "../libs/easy-dom/elements";
-import { Coord } from "./GameState";
+import { IDynamicGetter } from "../libs/easy-dom/types";
+import { css } from "../utils/css";
+import { GameState } from "./GameState";
 
-interface IPlayerEl extends HTMLDivElement {
-  setCoord(coord: Coord): void;
-}
-export function PlayerEl(): IPlayerEl {
+export function PlayerEl(dynamicGameState: IDynamicGetter<GameState>) {
   const playerEl = div(
     {
-      className: "tile",
+      className: "tile PlayerEl",
       style: {
         width: gridCellSize + "px",
         height: gridCellSize + "px",
       },
     },
     tileSymbols.character
-  ) as IPlayerEl;
+  );
 
-  playerEl.setCoord = ([x, y]: Coord) => {
+  function draw(gameState: GameState) {
+    const [x, y] = gameState.playerCoord;
     playerEl.style.left = x * gridCellSize + "px";
     playerEl.style.top = y * gridCellSize + "px";
-  };
+  }
+
+  dynamicGameState.onChange(draw);
+  draw(dynamicGameState.get());
 
   return playerEl;
 }
+
+css`
+  .PlayerEl {
+    position: absolute;
+
+    transition-duration: 0.2s;
+    transition-property: top, left;
+  }
+`;

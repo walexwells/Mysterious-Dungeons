@@ -130,10 +130,6 @@ form {
   }
 }
 
-.game-runner-main-panel {
-  display: block flex;
-}
-
 .main-page-content{
   display: block flex;
   justify-content: center;
@@ -144,11 +140,11 @@ form {
   max-width: 80vw;
 }
 
-.hud {
+/* .hud {
   margin-top: .5em;
   display: block flex;
   justify-content: space-between;
-}
+} */
 
 .touch-mode .touch-controls{
   display: block;

@@ -1,31 +1,55 @@
 import { getDungeon } from "../data/dungeonStorage";
 import { ActionList } from "../editor/ActionList";
-import { Header } from "../utils/Header";
-import { div, h2 } from "../libs/easy-dom/elements";
+import { div, h1 } from "../libs/easy-dom/elements";
 import { GameGrid } from "./GameGrid";
+import { Game } from "./Game";
+import { subscribeToKeyboardGameActions } from "./subscribeToKeyboardGameActions";
+import { openPrompt } from "../utils/prompt";
+import { DungeonCompletePrompt } from "./DungeonCompletePrompt";
+import { GameInfoPanel } from "./GameInfoPanel";
+import { css } from "../utils/css";
+import { TouchControls } from "./TouchControls";
 
 export function DungeonPage(dungeonName: string) {
   const dungeon = getDungeon(dungeonName);
   if (!dungeon) {
-    debugger;
     location.assign("#/");
     return new Text("Error");
   }
 
+  const game = Game(dungeon);
+  const dispose = subscribeToKeyboardGameActions(game.doAction);
+
+  game.state.onChange((gameState) => {
+    if (gameState.done) {
+      dispose();
+      openPrompt(DungeonCompletePrompt(gameState, dungeon));
+    }
+  });
+
   const dungeonPage = div(
-    Header(h2(": ", dungeon.name)),
+    {
+      onDocumentDisconnect: dispose,
+    },
+    h1(dungeon.name),
     div(
-      { className: "game-runner-main-panel" },
-      GameGrid(dungeon),
+      { className: "DungeonPage-Content" },
+      div(GameGrid(game), GameInfoPanel(game)),
       div(
-        { className: "game-runner-left-panel" },
         ActionList({
           Restart: () => location.reload(),
           Exit: () => location.assign("#/"),
-        })
+        }),
+        TouchControls(game.doAction)
       )
     )
   );
 
   return dungeonPage;
 }
+
+css`
+  .DungeonPage-Content {
+    display: block flex;
+  }
+`;

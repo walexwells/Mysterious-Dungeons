@@ -1,44 +1,31 @@
-import { PubSub } from "./PubSub";
+import { DynamicValue } from "./DynamicValue";
 import { IDynamicGetter } from "./types";
 
 export type GetterTuple<T extends unknown[]> = {
   [K in keyof T]: IDynamicGetter<T[K]>;
 };
-export class Computed<T extends unknown[], OutputType>
-  implements IDynamicGetter<OutputType>
-{
-  private value: OutputType;
-  private inputs: GetterTuple<T>;
-  private computeFunc: (inputs: T) => OutputType;
-  private pubSub: PubSub<OutputType>;
 
-  constructor(inputs: GetterTuple<T>, computeFunc: (inputs: T) => OutputType) {
-    this.pubSub = new PubSub<OutputType>();
-    this.inputs = [...inputs]; // This copy ensures if the input object is changed it wont effect this computed.
-    this.computeFunc = computeFunc;
-    this.value = this.computeValue();
-    for (const getter of this.inputs) {
-      getter.onChange(() => this.computeValue());
-    }
+export function Computed<InputType, OutputType>(
+  input: IDynamicGetter<InputType>,
+  computeFunc: (input: InputType) => OutputType
+): IDynamicGetter<OutputType>;
+export function Computed<InputArrayType extends unknown[], OutputType>(
+  inputs: GetterTuple<InputArrayType>,
+  computeFunc: (...inputs: InputArrayType) => OutputType
+): IDynamicGetter<OutputType>;
+export function Computed<OutputType>(
+  inputs: unknown,
+  computeFunc: (...args: unknown[]) => OutputType
+): IDynamicGetter<OutputType> {
+  function compute(): OutputType {
+    return computeFunc(...dynamicInputs.map((x) => x.get()));
   }
 
-  private computeValue() {
-    const inputValues = this.getInputValues();
-    const value = this.computeFunc(inputValues);
-    this.value = value;
-    this.pubSub.publish(value);
-    return value;
+  const dynamicInputs = Array.isArray(inputs) ? [...inputs] : [inputs];
+  const dynamicValue = new DynamicValue<OutputType>(compute());
+  for (const getter of dynamicInputs) {
+    getter.onChange(() => dynamicValue.set(compute()));
   }
 
-  private getInputValues(): T {
-    return this.inputs.map((x) => x.get()) as T;
-  }
-
-  get(): OutputType {
-    return this.value;
-  }
-
-  onChange(listener: (value: OutputType) => void): () => void {
-    return this.pubSub.subscribe(listener);
-  }
+  return dynamicValue;
 }

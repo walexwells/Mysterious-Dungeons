@@ -2,6 +2,7 @@ import { DynamicValue } from "./DynamicValue";
 import { IDynamicGetter } from "./types";
 import { IDispose } from "./IDispose";
 import { NavigationMethod } from "./NavigationMethod";
+import { Computed } from "./Computed";
 
 export class HashNavigation
   implements IDynamicGetter<string>, NavigationMethod, IDispose
@@ -37,5 +38,11 @@ export class HashNavigation
   }
   onChange(listener: (value: string) => void): () => void {
     return this.dynamicHash.onChange(listener);
+  }
+
+  prop<KeyType extends keyof string>(
+    key: KeyType
+  ): IDynamicGetter<string[KeyType]> {
+    return Computed(this, (value) => value[key]);
   }
 }

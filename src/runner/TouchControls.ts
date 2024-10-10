@@ -1,0 +1,66 @@
+import { div } from "../libs/easy-dom/elements";
+import { css } from "../utils/css";
+import { GameAction } from "./GameState";
+
+export function TouchControls(doAction: (action: GameAction) => void) {
+  function touchListener() {
+    touchControls.style.display = "block";
+    dispose();
+  }
+
+  function dispose() {
+    document.removeEventListener("touchstart", touchListener);
+  }
+
+  document.addEventListener("touchstart", touchListener);
+  const touchControls = div(
+    { className: "TouchControls", onDocumentDisconnect: dispose },
+    div(TouchButton("↑", () => doAction("up"))),
+    div(
+      TouchButton("←", () => doAction("left")),
+      TouchButton("↓", () => doAction("down")),
+      TouchButton("→", () => doAction("right"))
+    )
+  );
+  return touchControls;
+}
+
+function TouchButton(label: string, onClick: () => void) {
+  return div({ className: "TouchButton", onClick }, label);
+}
+
+css`
+  .TouchControls {
+    display: none;
+
+    > div {
+      display: block flex;
+      justify-content: center;
+    }
+
+    .TouchButton {
+      display: block flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 11px;
+      border: inset black 7px;
+      margin: 2px;
+      background-color: #777;
+      color: white;
+      cursor: pointer;
+      line-height: 0;
+      width: 2em;
+      height: 2em;
+
+      &:hover {
+        position: relative;
+        bottom: 1px;
+      }
+
+      &:active {
+        position: relative;
+        top: 4px;
+      }
+    }
+  }
+`;

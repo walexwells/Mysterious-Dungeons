@@ -1,10 +1,10 @@
 import { describe, expect, test } from "vitest";
-import { Coord, GameAction, GameState, nextState } from "./GameState";
+import { Coord, GameAction, GameState, applyAction } from "./GameState";
 import { tileList } from "../data/tileList";
 import { IDungeon } from "../editor/IDungeon";
 import { getStartingState } from "./getStartingState";
 
-describe(nextState.name, () => {
+describe(applyAction.name, () => {
   const getTile = (label: string) => tileList.find((x) => x.label === label)!;
   const wall = getTile("Wall");
   const floor = getTile("Floor");
@@ -47,7 +47,7 @@ describe(nextState.name, () => {
       });
 
       // act
-      const result = nextState(action, state);
+      const result = applyAction(action, state);
 
       // assert
       expect(result.playerCoord).toEqual(coord);
@@ -61,7 +61,7 @@ describe(nextState.name, () => {
     });
 
     // act
-    const result = nextState("right", state);
+    const result = applyAction("right", state);
 
     // assert
     expect(result.playerCoord).toEqual([0, 0]);
@@ -77,7 +77,7 @@ describe(nextState.name, () => {
       });
 
       // act
-      const result = nextState(action, state);
+      const result = applyAction(action, state);
 
       // assert
       expect(result.playerCoord).toEqual([0, 0]);
@@ -89,7 +89,7 @@ describe(nextState.name, () => {
     const state = makeState({ tiles: [floor, treasure] });
 
     // act
-    const result = nextState("right", state);
+    const result = applyAction("right", state);
 
     // assert
     expect(result.playerCoord).toEqual([1, 0]);
@@ -102,7 +102,7 @@ describe(nextState.name, () => {
     const state = makeState({ tiles: [floor, key] });
 
     // act
-    const result = nextState("right", state);
+    const result = applyAction("right", state);
 
     // assert
     expect(result.playerCoord).toEqual([1, 0]);
@@ -116,7 +116,7 @@ describe(nextState.name, () => {
     const state = makeState({ tiles: [floor, exit] });
 
     // act
-    const result = nextState("right", state);
+    const result = applyAction("right", state);
 
     // assert
     expect(result.playerCoord).toEqual([1, 0]);
@@ -128,7 +128,7 @@ describe(nextState.name, () => {
     const state = makeState({ done: true });
 
     // act
-    const result = nextState("right", state);
+    const result = applyAction("right", state);
 
     // assert
     expect(result.done).toBeTruthy();

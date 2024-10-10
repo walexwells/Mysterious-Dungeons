@@ -12,7 +12,7 @@ export interface GameState {
   playerCoord: Coord;
   done: boolean;
 }
-export function nextState(action: GameAction, state: GameState): GameState {
+export function applyAction(action: GameAction, state: GameState): GameState {
   if (state.done) return state;
 
   const targetCoord = getTargetCoord(state.playerCoord, action);

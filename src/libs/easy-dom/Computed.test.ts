@@ -10,7 +10,7 @@ test(Computed.name, () => {
   const i3 = new DynamicValue(3);
 
   // act
-  const cAdd = new Computed([i1, i2, i3], ([i1, i2, i3]) => i1 + i2 + i3);
+  const cAdd = Computed([i1, i2, i3], (i1, i2, i3) => i1 + i2 + i3);
 
   // assert
   expect(isDynamic(i1)).toBe(true);
@@ -22,7 +22,7 @@ test(Computed.name, () => {
   const i4 = new DynamicValue(4);
 
   // act
-  const cSub = new Computed([cAdd, i4], ([cAdd, i4]) => cAdd - i4);
+  const cSub = Computed([cAdd, i4], (cAdd, i4) => cAdd - i4);
 
   // assert
   expect(cSub.get()).toBe(2);
