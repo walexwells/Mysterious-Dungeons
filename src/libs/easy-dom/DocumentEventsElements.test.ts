@@ -1,17 +1,17 @@
 import { beforeEach, expect, suite, test, vi } from "vitest";
-import { DocumentEventsCustomElements } from "./DocumentEventsElements";
 import { DocumentEvent } from "./DocumentEvent";
+import { createDocumentEventsElement } from "./DocumentEventsElements";
 
 // prettier-ignore
 const tagNames: (keyof HTMLElementTagNameMap)[] = ["object","a","abbr","address","area","article","aside","audio","b","base","bdi","bdo","blockquote","body","br","button","canvas","caption","cite","code","col","colgroup","data","datalist","dd","del","details","dfn","dialog","div","dl","dt","em","embed","fieldset","figcaption","figure","footer","form","h1","h2","h3","h4","h5","h6","head","header","hgroup","hr","html","i","iframe","img","input","ins","kbd","label","legend","li","link","main","map","mark","menu","meta","meter","nav","noscript","ol","optgroup","option","output","p","picture","pre","progress","q","rp","rt","ruby","s","samp","script","section","select","slot","small","source","span","strong","style","sub","summary","sup","table","tbody","td","template","textarea","tfoot","th","thead","time","title","tr","track","u","ul","var","video","wbr"];
 
-suite.each(tagNames)(`${DocumentEventsCustomElements.name}: %s`, (tagName) => {
+suite.each(tagNames)(`${createDocumentEventsElement.name}: %s`, (tagName) => {
   const connectListener = vi.fn();
   const disconnectListener = vi.fn();
   let element = null as unknown as HTMLElement;
 
   beforeEach(() => {
-    element = DocumentEventsCustomElements.createElement(tagName);
+    element = createDocumentEventsElement(tagName);
     element.addEventListener(DocumentEvent.CONNECT, connectListener);
     element.addEventListener(DocumentEvent.DISCONNECT, disconnectListener);
     clearMocks();

@@ -1,22 +1,22 @@
 import { PubSub } from "./PubSub";
 import { IDynamicGetter, IDynamicSetter } from "./types";
 
-export class DynamicValue<T> implements IDynamicGetter<T>, IDynamicSetter<T> {
-  private value: T;
-  private pubSub: PubSub<T>;
+export function Dynamic<T>(
+  initialValue: T
+): IDynamicGetter<T> & IDynamicSetter<T> {
+  const pubSub = PubSub<T>();
+  let value = initialValue;
 
-  constructor(initialValue: T) {
-    this.pubSub = new PubSub<T>();
-    this.value = initialValue;
-  }
-  set(value: T): void {
-    this.value = value;
-    this.pubSub.publish(value);
-  }
-  get(): T {
-    return this.value;
-  }
-  onChange(listener: (value: T) => void): () => void {
-    return this.pubSub.subscribe(listener);
-  }
+  return {
+    set(v: T) {
+      value = v;
+      pubSub.publish(v);
+    },
+    get() {
+      return value;
+    },
+    onChange(listener: (value: T) => void) {
+      return pubSub.subscribe(listener);
+    },
+  };
 }

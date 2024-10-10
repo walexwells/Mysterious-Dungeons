@@ -9,7 +9,7 @@ import { EasyDomNode } from "./EasyDomNode";
 import { applyConfig } from "./applyConfig";
 import { createContextRequestor } from "./createContextRequestor";
 import { getContextConfig } from "./getContextConfig";
-import { DocumentEventsCustomElements } from "./DocumentEventsElements";
+import { createDocumentEventsElement } from "./DocumentEventsElements";
 
 function getConfigAndFirstChild<T extends HtmlTags>(
   arg: EasyDomNode | EasyDomElementConfig<T>
@@ -37,7 +37,7 @@ function createElement<T extends HtmlTags>(
   if (contextConfig.requests.length) {
     return createContextRequestor(tag, contextConfig.requests[0][0], true);
   } else if (config?.onDocumentConnect || config?.onDocumentDisconnect) {
-    return DocumentEventsCustomElements.createElement(tag);
+    return createDocumentEventsElement(tag);
   } else {
     return document.createElement(tag);
   }

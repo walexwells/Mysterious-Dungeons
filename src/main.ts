@@ -3,21 +3,21 @@ import { EditorPage } from "./editor/EditorPage";
 import "./style.css";
 import { div } from "./libs/easy-dom/elements";
 import { HashNavigation } from "./libs/easy-dom/HashNavigation";
-import { Router } from "./libs/easy-dom/Router";
+import { Router, RouterArg } from "./libs/easy-dom/Router";
 import { MainPage } from "./menu/MainPage";
 
 const appEl = document.querySelector<HTMLDivElement>("#app")!;
 
-const hashNavigation = new HashNavigation();
+const hashNavigation = HashNavigation();
 
-const router = new Router(
+const router = Router(
   [
     {
-      pattern: ["dungeon", Router.Arg],
+      pattern: ["dungeon", RouterArg],
       component: DungeonPage,
     },
     {
-      pattern: ["edit", Router.Arg],
+      pattern: ["edit", RouterArg],
       component: EditorPage,
     },
     {

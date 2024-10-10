@@ -1,20 +1,17 @@
-export class PubSub<T> {
-  listeners: ((value: T) => void)[];
+export function PubSub<T>() {
+  const listeners: ((value: T) => void)[] = [];
+  return {
+    publish(value: T) {
+      for (const listener of listeners) {
+        listener(value);
+      }
+    },
 
-  constructor() {
-    this.listeners = [];
-  }
-
-  publish(value: T) {
-    for (const listener of this.listeners) {
-      listener(value);
-    }
-  }
-
-  subscribe(listener: (value: T) => void) {
-    this.listeners.push(listener);
-    return () => {
-      this.listeners.splice(this.listeners.indexOf(listener), 1);
-    };
-  }
+    subscribe(listener: (value: T) => void) {
+      listeners.push(listener);
+      return () => {
+        listeners.splice(listeners.indexOf(listener), 1);
+      };
+    },
+  };
 }

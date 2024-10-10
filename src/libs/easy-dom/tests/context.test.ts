@@ -1,7 +1,7 @@
 import { expect, suite, test } from "vitest";
 import { fireEvent, screen } from "@testing-library/dom";
 
-import { DynamicValue } from "../DynamicValue";
+import { Dynamic } from "../DynamicValue";
 import { EasyDomNode } from "../EasyDomNode";
 import { button, div } from "../elements";
 import { createContext } from "../context";
@@ -11,7 +11,7 @@ suite("context", () => {
     const countContext = createContext<number>("my-count");
 
     function CountProvider(...children: EasyDomNode[]) {
-      const count = new DynamicValue(0);
+      const count = Dynamic(0);
 
       function increment() {
         count.set(count.get() + 1);
@@ -27,7 +27,7 @@ suite("context", () => {
     }
 
     function CountDisplay() {
-      const count = new DynamicValue(-1);
+      const count = Dynamic(-1);
 
       return div(
         { context: (x) => x.request(countContext, count) },

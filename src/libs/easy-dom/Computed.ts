@@ -1,4 +1,4 @@
-import { DynamicValue } from "./DynamicValue";
+import { Dynamic } from "./DynamicValue";
 import { IDynamicGetter } from "./types";
 
 export type GetterTuple<T extends unknown[]> = {
@@ -22,7 +22,7 @@ export function Computed<OutputType>(
   }
 
   const dynamicInputs = Array.isArray(inputs) ? [...inputs] : [inputs];
-  const dynamicValue = new DynamicValue<OutputType>(compute());
+  const dynamicValue = Dynamic<OutputType>(compute());
   for (const getter of dynamicInputs) {
     getter.onChange(() => dynamicValue.set(compute()));
   }

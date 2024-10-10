@@ -1,9 +1,9 @@
 import { expect, test } from "vitest";
-import { DynamicValue } from "./DynamicValue";
+import { Dynamic } from "./DynamicValue";
 
-test(DynamicValue.name, () => {
+test(Dynamic.name, () => {
   // act
-  const dv = new DynamicValue(10);
+  const dv = Dynamic(10);
 
   // assert
   expect(dv.get()).toBe(10);

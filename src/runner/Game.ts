@@ -1,5 +1,5 @@
 import { IDungeon } from "../editor/IDungeon";
-import { DynamicValue } from "../libs/easy-dom/DynamicValue";
+import { Dynamic } from "../libs/easy-dom/DynamicValue";
 import { IDynamicGetter } from "../libs/easy-dom/types";
 import { applyVisibilityToState } from "./applyVisibility";
 import { GameAction, GameState, applyAction } from "./GameState";
@@ -13,7 +13,7 @@ export interface IGame {
 export function Game(dungeon: IDungeon): IGame {
   let gameState = getStartingState(dungeon);
   gameState = applyVisibilityToState(gameState);
-  const state = new DynamicValue(gameState);
+  const state = Dynamic(gameState);
 
   return {
     state,

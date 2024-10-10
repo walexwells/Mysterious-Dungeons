@@ -4,7 +4,7 @@ import { using } from "./IDispose";
 
 suite(HashNavigation.name, () => {
   test(async function BasicUsage() {
-    await using(new HashNavigation())(async (hashNav) => {
+    await using(HashNavigation())(async (hashNav) => {
       expect(hashNav.get()).toBe("");
       hashNav.navigate("/");
       expect(hashNav.get()).toBe("/");

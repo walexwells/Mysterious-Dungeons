@@ -9,10 +9,9 @@ function renderDynamic(value: IDynamicGetter<EasyDomNode>): Node {
     const textNodeGetter = value as
       | IDynamicGetter<string>
       | IDynamicGetter<number>;
-    const dynamicText = new DynamicText(textNodeGetter);
-    return dynamicText.textNode;
+    return DynamicText(textNodeGetter);
   } else if (currentValue instanceof Node) {
-    const dynamicNode = new DynamicNode(value as IDynamicGetter<Node>);
+    const dynamicNode = DynamicNode(value as IDynamicGetter<Node>);
     return dynamicNode.currentNode;
   }
   throw new Error(`Unexpected value: ${value}`);

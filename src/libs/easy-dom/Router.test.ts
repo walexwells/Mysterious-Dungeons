@@ -8,10 +8,10 @@ import { using } from "./IDispose";
 
 suite("Router", () => {
   test("basic routing", async () => {
-    await using(new HashNavigation())(async (hashNav) => {
+    await using(HashNavigation())(async (hashNav) => {
       await hashNav.navigate("/1");
 
-      const router = new Router(
+      const router = Router(
         [
           { pattern: "1", component: () => div("one") },
           { pattern: "2", component: () => div("two") },

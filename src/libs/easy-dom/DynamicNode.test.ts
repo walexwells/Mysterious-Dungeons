@@ -1,14 +1,14 @@
 import { expect, test } from "vitest";
 import { DynamicNode } from "./DynamicNode";
-import { DynamicValue } from "./DynamicValue";
+import { Dynamic } from "./DynamicValue";
 
 test(DynamicNode.name, () => {
   // arrange
   const parent = document.createElement("div");
   const node1 = document.createElement("div");
   const node2 = document.createElement("span");
-  const dv = new DynamicValue<Node>(node1);
-  new DynamicNode(dv);
+  const dv = Dynamic<Node>(node1);
+  DynamicNode(dv);
   parent.appendChild(node1);
 
   // assert

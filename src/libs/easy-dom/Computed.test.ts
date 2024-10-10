@@ -1,13 +1,13 @@
 import { expect, test } from "vitest";
 import { isDynamic, isDynamicGetter, isDynamicSetter } from "./types";
-import { DynamicValue } from "./DynamicValue";
+import { Dynamic } from "./DynamicValue";
 import { Computed } from "./Computed";
 
 test(Computed.name, () => {
   // arrange
-  const i1 = new DynamicValue(1);
-  const i2 = new DynamicValue(2);
-  const i3 = new DynamicValue(3);
+  const i1 = Dynamic(1);
+  const i2 = Dynamic(2);
+  const i3 = Dynamic(3);
 
   // act
   const cAdd = Computed([i1, i2, i3], (i1, i2, i3) => i1 + i2 + i3);
@@ -19,7 +19,7 @@ test(Computed.name, () => {
   expect(cAdd.get()).toBe(6);
 
   // arrange
-  const i4 = new DynamicValue(4);
+  const i4 = Dynamic(4);
 
   // act
   const cSub = Computed([cAdd, i4], (cAdd, i4) => cAdd - i4);

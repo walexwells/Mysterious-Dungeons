@@ -1,48 +1,33 @@
-import { DynamicValue } from "./DynamicValue";
+import { Dynamic } from "./DynamicValue";
 import { IDynamicGetter } from "./types";
 import { IDispose } from "./IDispose";
 import { NavigationMethod } from "./NavigationMethod";
-import { Computed } from "./Computed";
 
-export class HashNavigation
-  implements IDynamicGetter<string>, NavigationMethod, IDispose
-{
-  private dynamicHash: DynamicValue<string>;
-  private listener: (e: HashChangeEvent) => void;
-
-  constructor() {
-    this.dynamicHash = new DynamicValue(location.hash.slice(1));
-    this.listener = (e) => {
-      const hashIndex = e.newURL.indexOf("#");
-      const newPath = e.newURL.slice(hashIndex + 1);
-      this.dynamicHash.set(newPath);
-    };
-    window.addEventListener("hashchange", this.listener);
+export function HashNavigation(): IDynamicGetter<string> &
+  NavigationMethod &
+  IDispose {
+  const dynamicHash = Dynamic(location.hash.slice(1));
+  function listener(e: HashChangeEvent) {
+    const hashIndex = e.newURL.indexOf("#");
+    const newPath = e.newURL.slice(hashIndex + 1);
+    dynamicHash.set(newPath);
   }
-  dispose(): void {
-    window.removeEventListener("hashchange", this.listener);
-  }
-  navigate(path: string): Promise<void> {
-    if (this.dynamicHash.get() === path) return Promise.resolve();
-    return new Promise((resolve) => {
-      const unsubscribe = this.dynamicHash.onChange(() => {
-        unsubscribe();
-        resolve();
+  window.addEventListener("hashchange", listener);
+  return {
+    dispose(): void {
+      window.removeEventListener("hashchange", listener);
+    },
+    navigate(path: string): Promise<void> {
+      if (dynamicHash.get() === path) return Promise.resolve();
+      return new Promise((resolve) => {
+        const unsubscribe = dynamicHash.onChange(() => {
+          unsubscribe();
+          resolve();
+        });
+        location.assign(`#${path}`);
       });
-      location.assign(`#${path}`);
-    });
-  }
-
-  get(): string {
-    return this.dynamicHash.get();
-  }
-  onChange(listener: (value: string) => void): () => void {
-    return this.dynamicHash.onChange(listener);
-  }
-
-  prop<KeyType extends keyof string>(
-    key: KeyType
-  ): IDynamicGetter<string[KeyType]> {
-    return Computed(this, (value) => value[key]);
-  }
+    },
+    get: dynamicHash.get,
+    onChange: dynamicHash.onChange,
+  };
 }

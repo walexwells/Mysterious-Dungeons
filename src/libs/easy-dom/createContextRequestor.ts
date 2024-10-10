@@ -2,7 +2,7 @@ import { ContextCallback, ContextValueType, UnknownContext } from "./context";
 import { ContextReceivedEvent } from "./ContextReceivedEvent";
 import ContextRequestEvent from "./ContextRequestEvent";
 import { DocumentEvent } from "./DocumentEvent";
-import { DocumentEventsCustomElements } from "./DocumentEventsElements";
+import { createDocumentEventsElement } from "./DocumentEventsElements";
 
 interface IContextRequestorElement<T extends UnknownContext> {
   contextValue: ContextValueType<T>;
@@ -13,19 +13,6 @@ type ContextRequestorElement<
   ContextType extends UnknownContext
 > = ElementType & IContextRequestorElement<ContextType>;
 
-// declare global {
-//   interface Document {
-//     [createContextRequestor]<
-//       TagType extends keyof HTMLElementTagNameMap,
-//       ContextType extends UnknownContext
-//     >(
-//       tag: TagType,
-//       context: ContextType,
-//       subscribe?: boolean
-//     ): ContextRequestorElement<HTMLElementTagNameMap[TagType], ContextType>;
-//   }
-// }
-
 export function createContextRequestor<
   TagType extends keyof HTMLElementTagNameMap,
   ContextType extends UnknownContext
@@ -34,9 +21,10 @@ export function createContextRequestor<
   context: ContextType,
   subscribe?: boolean
 ): ContextRequestorElement<HTMLElementTagNameMap[TagType], ContextType> {
-  const element = DocumentEventsCustomElements.createElement(
-    tag
-  ) as ContextRequestorElement<HTMLElementTagNameMap[TagType], ContextType>;
+  const element = createDocumentEventsElement(tag) as ContextRequestorElement<
+    HTMLElementTagNameMap[TagType],
+    ContextType
+  >;
 
   let unsubscribeContext: (() => void) | undefined;
 
