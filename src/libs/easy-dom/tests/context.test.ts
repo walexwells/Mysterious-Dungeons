@@ -26,7 +26,7 @@ suite("context", () => {
       );
     }
 
-    function CountDisplay() {
+    function CountRequestor() {
       const count = Dynamic(-1);
 
       return div(
@@ -38,7 +38,7 @@ suite("context", () => {
 
     // act: initial render
     document.body.append(
-      CountProvider("some stuff", div("more things", CountDisplay()))
+      CountProvider("some stuff", div("more things", CountRequestor()))
     );
 
     // assert
