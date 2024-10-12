@@ -1,5 +1,5 @@
 import { gridCellSize } from "../data/constants";
-import { div } from "../libs/easy-dom/elements";
+import { div } from "../libs/df/elements";
 import { GridTile, Tile } from "../data/tileList";
 import { drawTile } from "../utils/drawTile";
 

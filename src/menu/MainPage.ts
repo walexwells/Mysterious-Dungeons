@@ -1,7 +1,7 @@
 import { getDungeonKey, saveDungeon } from "../data/dungeonStorage";
 import { getDungeonFromStr } from "../data/dungeonStr";
 import { ActionList } from "../editor/ActionList";
-import { button, div, input, label } from "../libs/easy-dom/elements";
+import { button, div, input, label } from "../libs/df/elements";
 import { Header } from "../utils/Header";
 import { openAlert, openPrompt } from "../utils/prompt";
 import { selectDungeon } from "./selectDungeon";
@@ -41,7 +41,7 @@ export function MainPage() {
                         const dungeon = getDungeonFromStr(inputEl.value);
                         const saved = saveDungeon(dungeon);
                         openAlert(`Import Successful: ${saved.name}`);
-                      } catch (err) {
+                      } catch {
                         openAlert("Import Failed");
                       }
                     },

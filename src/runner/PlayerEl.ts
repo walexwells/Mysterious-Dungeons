@@ -1,11 +1,11 @@
 import { gridCellSize } from "../data/constants";
 import { tileSymbols } from "../data/tileList";
-import { div } from "../libs/easy-dom/elements";
-import { IDynamicGetter } from "../libs/easy-dom/types";
-import { css } from "../utils/css";
+import { DynamicGetter } from "../libs/dynamics/types";
+import { div } from "../libs/df/elements";
+import { createStyle, css } from "../utils/css";
 import { GameState } from "./GameState";
 
-export function PlayerEl(dynamicGameState: IDynamicGetter<GameState>) {
+export function PlayerEl(dynamicGameState: DynamicGetter<GameState>) {
   const playerEl = div(
     {
       className: "tile PlayerEl",
@@ -29,11 +29,11 @@ export function PlayerEl(dynamicGameState: IDynamicGetter<GameState>) {
   return playerEl;
 }
 
-css`
+createStyle(css`
   .PlayerEl {
     position: absolute;
 
     transition-duration: 0.2s;
     transition-property: top, left;
   }
-`;
+`);

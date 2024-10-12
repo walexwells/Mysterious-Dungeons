@@ -1,17 +1,17 @@
 import { gridCellSize } from "../data/constants";
-import { div } from "../libs/easy-dom/elements";
+import { div } from "../libs/df/elements";
 import { GameCell } from "./GameCell";
 import { PlayerEl } from "./PlayerEl";
 import { IGame } from "./Game";
-import { css } from "../utils/css";
-import { DynamicProp } from "../libs/easy-dom/DynamicProp";
-import { Computed } from "../libs/easy-dom/Computed";
-import { IDynamicGetter } from "../libs/easy-dom/types";
+import { createStyle, css } from "../utils/css";
+import { DynamicProp } from "../libs/dynamics/DynamicProp";
+import { Computed } from "../libs/dynamics/Computed";
+import { DynamicGetter } from "../libs/dynamics/types";
 
 function DynamicIndex<T>(
-  source: IDynamicGetter<T[]>,
+  source: DynamicGetter<T[]>,
   index: number
-): IDynamicGetter<T> {
+): DynamicGetter<T> {
   return Computed(source, (arr) => arr[index]);
 }
 
@@ -39,11 +39,11 @@ export function GameGrid(game: IGame) {
   );
 }
 
-css`
+createStyle(css`
   .GameGrid {
     border: solid 4px black;
     position: relative;
     overflow: auto;
     background-color: lightgray;
   }
-`;
+`);

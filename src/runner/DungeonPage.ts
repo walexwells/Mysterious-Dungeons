@@ -1,13 +1,13 @@
 import { getDungeon } from "../data/dungeonStorage";
 import { ActionList } from "../editor/ActionList";
-import { div, h1 } from "../libs/easy-dom/elements";
+import { div, h1 } from "../libs/df/elements";
 import { GameGrid } from "./GameGrid";
 import { Game } from "./Game";
 import { subscribeToKeyboardGameActions } from "./subscribeToKeyboardGameActions";
 import { openPrompt } from "../utils/prompt";
 import { DungeonCompletePrompt } from "./DungeonCompletePrompt";
 import { GameInfoPanel } from "./GameInfoPanel";
-import { css } from "../utils/css";
+import { createStyle, css } from "../utils/css";
 import { TouchControls } from "./TouchControls";
 
 export function DungeonPage(dungeonName: string) {
@@ -29,7 +29,7 @@ export function DungeonPage(dungeonName: string) {
 
   const dungeonPage = div(
     {
-      onDocumentDisconnect: dispose,
+      onDisconnected: dispose,
     },
     h1(dungeon.name),
     div(
@@ -48,8 +48,8 @@ export function DungeonPage(dungeonName: string) {
   return dungeonPage;
 }
 
-css`
+createStyle(css`
   .DungeonPage-Content {
     display: block flex;
   }
-`;
+`);

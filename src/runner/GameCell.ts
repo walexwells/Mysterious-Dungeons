@@ -1,14 +1,14 @@
 import { gridCellSize } from "../data/constants";
 import { Tile } from "../data/tileList";
-import { div } from "../libs/easy-dom/elements";
-import { IDynamicGetter } from "../libs/easy-dom/types";
-import { css } from "../utils/css";
+import { DynamicGetter } from "../libs/dynamics/types";
+import { div } from "../libs/df/elements";
+import { createStyle, css } from "../utils/css";
 import { drawTile } from "../utils/drawTile";
 
 export function GameCell(
   x: number,
   y: number,
-  dynamicTile: IDynamicGetter<Tile>
+  dynamicTile: DynamicGetter<Tile>
 ) {
   function draw(tile: Tile) {
     drawTile(gameCell, tile);
@@ -29,7 +29,7 @@ export function GameCell(
   return gameCell;
 }
 
-css`
+createStyle(css`
   .GameCell {
     box-sizing: border-box;
     display: block flex;
@@ -40,4 +40,4 @@ css`
     transition-duration: 0.2s;
     transition-property: opacity;
   }
-`;
+`);

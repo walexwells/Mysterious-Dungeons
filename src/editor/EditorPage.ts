@@ -6,18 +6,24 @@ import {
 } from "../data/dungeonStorage";
 import { getDungeonStr } from "../data/dungeonStr";
 import { Header } from "../utils/Header";
-import { div, form, h2, input, label } from "../libs/easy-dom/elements";
+import { div, form, h2, input, label } from "../libs/df/elements";
 import { openPrompt } from "../utils/prompt";
 import { selectDungeon } from "../menu/selectDungeon";
 import { ActionList } from "./ActionList";
 import { EditorGrid } from "./EditorGrid";
 import { TilePicker } from "./TilePicker";
+import { EditorSession, IEditorSession } from "./EditorSession";
+import { Dynamic } from "../libs/dynamics/DynamicValue";
 
 export function EditorPage(initialDungeonName?: string) {
   const dungeon = getDungeon(initialDungeonName);
 
-  const pickerEl = TilePicker();
-  const nameForm = DungeonNameForm(dungeon?.name);
+  const editorSession = EditorSession(dungeon);
+
+  const pickerEl = TilePicker((tileId: number) =>
+    editorSession.doAction({ action: "selectTile", tileId: tileId })
+  );
+  const nameForm = DungeonNameForm(editorSession);
   const leftPanel = div({ className: "editor-left-panel" }, nameForm, pickerEl);
 
   function getTileFromPicker() {
@@ -110,11 +116,11 @@ export function EditorPage(initialDungeonName?: string) {
   return DungeonEditor;
 }
 
-function DungeonNameForm(initialValue?: string) {
+function DungeonNameForm(editorSession: IEditorSession) {
+  const name = Dynamic(editorSession.state.get().name);
+  name.onChange((x) => editorSession.doAction({ action: "setName", name: x }));
+
   return form(
-    label(
-      "Dungeon name: ",
-      input({ name: "dungeonName", value: initialValue || "" })
-    )
+    label("Dungeon name: ", input({ name: "dungeonName", value: name }))
   );
 }

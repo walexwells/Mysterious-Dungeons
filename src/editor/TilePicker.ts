@@ -1,5 +1,5 @@
 import { gridCellSize } from "../data/constants";
-import { div } from "../libs/easy-dom/elements";
+import { div } from "../libs/df/elements";
 import { Tile, tileList } from "../data/tileList";
 import { drawTile } from "../utils/drawTile";
 
@@ -7,7 +7,7 @@ type ITilePicker = HTMLDivElement & {
   selectedTile?: Tile;
 };
 
-export function TilePicker() {
+export function TilePicker(selectTile: (tileId: number) => void) {
   const tilePicker = div(
     {
       className: "tile-picker",
@@ -23,6 +23,7 @@ export function TilePicker() {
     });
     tilePicker.selectedTile = tile;
     tileEl.classList.add("selected");
+    selectTile(tile.id);
   }
 
   return tilePicker;

@@ -1,5 +1,5 @@
-import { div } from "../libs/easy-dom/elements";
-import { css } from "../utils/css";
+import { div } from "../libs/df/elements";
+import { createStyle, css } from "../utils/css";
 import { GameAction } from "./GameState";
 
 export function TouchControls(doAction: (action: GameAction) => void) {
@@ -29,38 +29,38 @@ function TouchButton(label: string, onClick: () => void) {
   return div({ className: "TouchButton", onClick }, label);
 }
 
-css`
+createStyle(css`
   .TouchControls {
     display: none;
-
-    > div {
-      display: block flex;
-      justify-content: center;
-    }
-
-    .TouchButton {
-      display: block flex;
-      justify-content: center;
-      align-items: center;
-      border-radius: 11px;
-      border: inset black 7px;
-      margin: 2px;
-      background-color: #777;
-      color: white;
-      cursor: pointer;
-      line-height: 0;
-      width: 2em;
-      height: 2em;
-
-      &:hover {
-        position: relative;
-        bottom: 1px;
-      }
-
-      &:active {
-        position: relative;
-        top: 4px;
-      }
-    }
   }
-`;
+
+  .TouchControls > div {
+    display: block flex;
+    justify-content: center;
+  }
+
+  .TouchControls .TouchButton {
+    display: block flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 11px;
+    border: inset black 7px;
+    margin: 2px;
+    background-color: #777;
+    color: white;
+    cursor: pointer;
+    line-height: 0;
+    width: 2em;
+    height: 2em;
+  }
+
+  .TouchControls:hover {
+    position: relative;
+    bottom: 1px;
+  }
+
+  .TouchControls:active {
+    position: relative;
+    top: 4px;
+  }
+`);

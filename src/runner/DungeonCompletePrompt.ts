@@ -1,5 +1,5 @@
 import { IDungeon } from "../editor/IDungeon";
-import { div, h3, button } from "../libs/easy-dom/elements";
+import { div, h3, button } from "../libs/df/elements";
 import { GameState } from "./GameState";
 
 export function DungeonCompletePrompt(

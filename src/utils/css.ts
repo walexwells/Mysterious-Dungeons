@@ -1,6 +1,10 @@
-import { style } from "../libs/easy-dom/elements";
+import { style } from "../libs/df/elements";
 
 //const css = String.raw;
 export function css(strings: TemplateStringsArray, ...values: unknown[]) {
-  document.head.append(style(String.raw(strings, ...values)));
+  return String.raw(strings, ...values);
+}
+
+export function createStyle(cssString: string) {
+  document.head.append(style(cssString));
 }

@@ -1,4 +1,4 @@
-import { button, div } from "../libs/easy-dom/elements";
+import { button, div } from "../libs/df/elements";
 
 export interface Actions {
   [key: string]: () => void;

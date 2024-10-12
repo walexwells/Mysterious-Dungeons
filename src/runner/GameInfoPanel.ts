@@ -1,7 +1,7 @@
-import { Computed } from "../libs/easy-dom/Computed";
-import { DynamicProp } from "../libs/easy-dom/DynamicProp";
-import { div } from "../libs/easy-dom/elements";
-import { css } from "../utils/css";
+import { Computed } from "../libs/dynamics/Computed";
+import { DynamicProp } from "../libs/dynamics/DynamicProp";
+import { div } from "../libs/df/elements";
+import { createStyle, css } from "../utils/css";
 import { IGame } from "./Game";
 
 export function GameInfoPanel(game: IGame) {
@@ -23,10 +23,10 @@ export function GameInfoPanel(game: IGame) {
   );
 }
 
-css`
+createStyle(css`
   .GameInfoPanel {
     margin-top: 0.5em;
     display: block flex;
     justify-content: space-between;
   }
-`;
+`);
