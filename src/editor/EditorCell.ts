@@ -1,49 +1,29 @@
-import { gridCellSize } from "../data/constants";
-import { div } from "../libs/df/elements";
-import { GridTile, Tile } from "../data/tileList";
-import { drawTile } from "../utils/drawTile";
+import { gridCellSize } from '../data/constants'
+import { div } from '../libs/df/elements'
+import { tileList } from '../data/tileList'
+import { drawTile } from '../utils/drawTile'
+import { EditorSession } from './EditorSession'
 
-export type IEditorCell = HTMLDivElement & {
-  tile: GridTile;
-  setTile(tile: Tile): void;
-};
-export function EditorCell(
-  tile: GridTile,
-  getSelectedTile: () => Tile | undefined,
-  isPainting: () => boolean
-) {
-  const editorCell = div({
-    className: "tile",
-    style: {
-      width: gridCellSize + "px",
-      height: gridCellSize + "px",
-      top: tile.y * gridCellSize + "px",
-      left: tile.x * gridCellSize + "px",
-    },
-    onmouseenter: () => isPainting() && paint(),
-    onclick: paint,
-  }) as IEditorCell;
-  editorCell.tile = tile;
-  editorCell.setTile = (newTile: Tile) => {
-    const { x, y } = editorCell.tile;
-    editorCell.tile = {
-      x,
-      y,
-      ...newTile,
-    } as GridTile;
-    drawTile(editorCell, newTile, true);
-  };
+export function EditorCell(tileIndex: number, editorSession: EditorSession) {
+    const x = tileIndex % editorSession.width
+    const y = Math.floor(tileIndex / editorSession.width)
 
-  function paint() {
-    const tile = getSelectedTile();
-    if (tile) {
-      editorCell.setTile(tile);
-    }
-  }
-  drawTile(editorCell, tile, true);
-  return editorCell;
-}
+    const editorCell = div({
+        className: 'tile',
+        style: {
+            width: gridCellSize + 'px',
+            height: gridCellSize + 'px',
+            top: y * gridCellSize + 'px',
+            left: x * gridCellSize + 'px',
+        },
+        onmouseenter: () => editorSession.painting && editorSession.paintTile(tileIndex),
+        onclick: () => editorSession.paintTile(tileIndex),
+        onDisconnected: () => unsubscribe(),
+    })
 
-export function isEditorCell(value: unknown): value is IEditorCell {
-  return value instanceof HTMLDivElement && "tile" in value;
+    const unsubscribe = editorSession.changes.subscribe(() =>
+        drawTile(editorCell, tileList[editorSession.tiles[tileIndex]], true)
+    )
+
+    return editorCell
 }

@@ -1,88 +1,115 @@
-import { Dynamic } from "../libs/dynamics/DynamicValue";
-import { DynamicGetter } from "../libs/dynamics/types";
-import { IDungeon } from "./IDungeon";
+import { IPubSub, PubSub } from '../libs/dynamics/PubSub'
+import { chunk } from '../utils/chunk'
+import { IDungeon } from './IDungeon'
 
-interface EditorSessionState {
-  width: number;
-  height: number;
-  name: string;
-  tiles: number[];
-  selectedTile: number;
-  provenWinnable: boolean;
-}
+const DEFAULT_WIDTH = 15
+const DEFAULT_HEIGHT = 10
 
-type EditorAction =
-  | { action: "selectTile"; tileId: number }
-  | { action: "paintTile"; tileIndex: number }
-  | { action: "setDimensions"; width: number; height: number }
-  | { action: "setName"; name: string };
+export class EditorSession {
+    width: number
+    height: number
+    name: string
+    tiles: number[]
+    selectedTile: number
+    provenWinnable: boolean
+    changes: IPubSub<EditorSession>
+    painting: boolean = false
 
-const DEFAULT_WIDTH = 15;
-const DEFAULT_HEIGHT = 10;
+    constructor(dungeon?: IDungeon) {
+        this.width = dungeon?.width ?? DEFAULT_WIDTH
+        this.height = dungeon?.height ?? DEFAULT_HEIGHT
+        this.name = dungeon?.name ?? ''
+        this.tiles = dungeon
+            ? [...dungeon.cells]
+            : new Array(DEFAULT_WIDTH * DEFAULT_HEIGHT).fill(0)
+        this.selectedTile = 0
+        this.provenWinnable = false
+        this.changes = PubSub<EditorSession>()
+    }
 
-function nextEditorSessionState(
-  state: EditorSessionState,
-  action: EditorAction
-): EditorSessionState {
-  if (action.action === "selectTile") {
-    return { ...state, selectedTile: action.tileId };
-  } else if (action.action === "paintTile") {
-    return {
-      ...state,
-      tiles: state.tiles.map((t, i) =>
-        i === action.tileIndex ? state.selectedTile : t
-      ),
-    };
-  } else if (action.action === "setDimensions") {
-    return setDimensions(state, action);
-  } else if (action.action === "setName") {
-    return { ...state, name: action.name };
-  }
-  throw new Error(`Unknown action ${action}`);
-}
+    selectTile(tileId: number) {
+        this.selectedTile = tileId
+        this.changes.publish(this)
+    }
 
-export interface IEditorSession {
-  state: DynamicGetter<EditorSessionState>;
-  doAction: (action: EditorAction) => void;
-}
-export function EditorSession(dungeon?: IDungeon): IEditorSession {
-  const state = Dynamic<EditorSessionState>({
-    width: dungeon?.width ?? DEFAULT_WIDTH,
-    height: dungeon?.height ?? DEFAULT_HEIGHT,
-    name: dungeon?.name ?? "",
-    tiles: dungeon
-      ? [...dungeon.cells]
-      : new Array(DEFAULT_WIDTH * DEFAULT_HEIGHT).fill(0),
-    selectedTile: 0,
-    provenWinnable: false,
-  });
+    paintTile(tileIndex: number) {
+        this.tiles[tileIndex] = this.selectedTile
+        this.changes.publish(this)
+    }
 
-  return {
-    state: state,
-    doAction(action: EditorAction) {
-      state.set(nextEditorSessionState(state.get(), action));
-    },
-  };
-}
-function setDimensions(
-  state: EditorSessionState,
-  action: { action: "setDimensions"; width: number; height: number }
-): EditorSessionState {
-  const { width: oldWidth, height: oldHeight } = state;
-  const { width: newWidth, height: newHeight } = action;
+    setName(dungeonName: string) {
+        this.name = dungeonName
+        this.changes.publish(this)
+    }
 
-  return {
-    ...state,
-    width: newWidth,
-    height: newHeight,
-    tiles: new Array(newWidth * newHeight).fill(0).map((_, i) => {
-      const x = i % newWidth;
-      const y = Math.floor(i / newWidth);
-      if (x >= oldWidth || y >= oldHeight) {
-        return 0;
-      } else {
-        return state.tiles[x + y * oldWidth];
-      }
-    }),
-  };
+    addColumnToRight() {
+        this.tiles = chunk(this.tiles, this.width)
+            .map((row) => [...row, 0])
+            .reduce((a, b) => a.concat(b))
+        this.width += 1
+        this.changes.publish(this)
+    }
+
+    addColumnToLeft() {
+        this.tiles = chunk(this.tiles, this.width)
+            .map((row) => [0, ...row])
+            .reduce((a, b) => a.concat(b))
+        this.width += 1
+        this.changes.publish(this)
+    }
+
+    addRowToTop() {
+        this.tiles = new Array(this.width).fill(0).concat(this.tiles)
+        this.height += 1
+        this.changes.publish(this)
+    }
+
+    addRowToBottom() {
+        this.tiles = this.tiles.concat(new Array(this.width).fill(0))
+        this.height += 1
+        this.changes.publish(this)
+    }
+
+    removeColumnFromRight() {
+        this.tiles = chunk(this.tiles, this.width)
+            .map((x) => x.slice(0, this.width - 1))
+            .reduce((a, b) => a.concat(b))
+
+        this.width -= 1
+        this.changes.publish(this)
+    }
+
+    removeColumnFromLeft() {
+        this.tiles = chunk(this.tiles, this.width)
+            .map((x) => x.slice(1, this.width))
+            .reduce((a, b) => a.concat(b))
+
+        this.width -= 1
+        this.changes.publish(this)
+    }
+
+    removeRowFromTop() {
+        this.tiles = chunk(this.tiles, this.width)
+            .filter((_, i) => i !== 0)
+            .reduce((a, b) => a.concat(b))
+        this.height -= 1
+        this.changes.publish(this)
+    }
+
+    removeRowFromBottom() {
+        this.tiles = chunk(this.tiles, this.width)
+            .filter((_, i) => i !== this.height - 1)
+            .reduce((a, b) => a.concat(b))
+        this.height -= 1
+        this.changes.publish(this)
+    }
+
+    getDungeon(): IDungeon {
+        return {
+            width: this.width,
+            height: this.height,
+            name: this.name,
+            cells: this.tiles,
+        }
+    }
 }
