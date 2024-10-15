@@ -2,7 +2,7 @@ import { DfElementConfig, HtmlTags } from './types'
 import { DfContextConfig, getContextConfig } from './getContextConfig'
 
 import { provideValuesForContext } from '../dom-context/provideValuesForContext'
-import { isDynamicGetter } from '../dynamics/types'
+import { isDynamicGetter, isDynamicSetter } from '../dynamics/types'
 import {
     HTMLElementWithConnectionEvents,
     isHtmlElementWithConnectionEvents,
@@ -49,6 +49,9 @@ export function applyConfig<T extends HtmlTags>(
                 }
             }
             updateValue(value.get())
+            if (isDynamicSetter(value) && element instanceof HTMLInputElement) {
+                element.addEventListener('change', () => value.set(element.value))
+            }
         } else {
             if (name in element) {
                 element[name as keyof HTMLElementTagNameMap[T]] = value
