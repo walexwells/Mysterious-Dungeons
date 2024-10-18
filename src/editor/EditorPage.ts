@@ -26,79 +26,9 @@ export function EditorPage(initialDungeonName?: string) {
         return (new FormData(nameForm).get('dungeonName') as string).trim()
     }
 
-    function save(): IDungeon {
-        const dungeon = editorSession.getDungeon()
-        const savedDungeon = saveDungeon(dungeon)
-        editorSession.setName(savedDungeon.name || '')
-        return savedDungeon
-    }
-
     const DungeonEditor = div(
         Header(h2(': Editor')),
-        div(
-            { className: 'dungeon-editor' },
-            leftPanel,
-            div(dungeonEditorGridEl),
-            ActionList([
-                {
-                    label: 'Save & Play',
-                    action: () => {
-                        const dungeon = save()
-                        if (dungeon.name) {
-                            location.assign(`#/dungeon/${getDungeonKey(dungeon.name)}`)
-                        }
-                    },
-                },
-                {
-                    label: 'Load',
-                    action: async () => {
-                        const dungeon = await selectDungeon()
-                        if (dungeon) {
-                            location.assign('#/edit/' + getDungeonKey(dungeon))
-                        }
-                    },
-                },
-                {
-                    label: 'Save',
-                    action: () => {
-                        const dungeon = save()
-                        if (dungeon.name) {
-                            location.assign('#/edit/' + getDungeonKey(dungeon.name))
-                        }
-                    },
-                },
-                {
-                    label: 'Delete',
-                    action: async () => {
-                        const result = await openPrompt<boolean>({
-                            message: 'Are you sure you want to delete this dungeon?',
-                            options: [
-                                { label: 'Cancel', value: false },
-                                { label: 'Delete', value: true, color: 'red' },
-                            ],
-                        })
-                        if (result) {
-                            deleteDungeon(getDungeonKey(getDungeonName()))
-                            location.assign(`#/`)
-                        }
-                    },
-                },
-                {
-                    label: 'Get Share Code',
-                    action: () => {
-                        const d = save()
-                        const shareStr = getDungeonStr(d)
-                        openPrompt<null>(() => div({ className: 'share-code' }, shareStr))
-                    },
-                },
-                {
-                    label: 'Exit Editor',
-                    action: () => {
-                        location.assign(`#/`)
-                    },
-                },
-            ])
-        )
+        div({ className: 'dungeon-editor' }, leftPanel, div(dungeonEditorGridEl))
     )
     editorSession.changes.publish(editorSession)
     return DungeonEditor
@@ -114,4 +44,73 @@ function DungeonNameForm(editorSession: EditorSession) {
         onChange: () => name.set(inputEl.value),
     })
     return form(label('Dungeon name: ', inputEl))
+}
+
+function EditorActions(editorSession: EditorSession) {
+    function save(): IDungeon {
+        const dungeon = editorSession.getDungeon()
+        const savedDungeon = saveDungeon(dungeon)
+        editorSession.setName(savedDungeon.name || '')
+        return savedDungeon
+    }
+
+    return ActionList([
+        {
+            label: 'Save & Play',
+            action: () => {
+                const dungeon = save()
+                if (dungeon.name) {
+                    location.assign(`#/dungeon/${getDungeonKey(dungeon.name)}`)
+                }
+            },
+        },
+        {
+            label: 'Load',
+            action: async () => {
+                const dungeon = await selectDungeon()
+                if (dungeon) {
+                    location.assign('#/edit/' + getDungeonKey(dungeon))
+                }
+            },
+        },
+        {
+            label: 'Save',
+            action: () => {
+                const dungeon = save()
+                if (dungeon.name) {
+                    location.assign('#/edit/' + getDungeonKey(dungeon.name))
+                }
+            },
+        },
+        {
+            label: 'Delete',
+            action: async () => {
+                const result = await openPrompt<boolean>({
+                    message: 'Are you sure you want to delete this dungeon?',
+                    options: [
+                        { label: 'Cancel', value: false },
+                        { label: 'Delete', value: true, color: 'red' },
+                    ],
+                })
+                if (result) {
+                    deleteDungeon(getDungeonKey(getDungeonName()))
+                    location.assign(`#/`)
+                }
+            },
+        },
+        {
+            label: 'Get Share Code',
+            action: () => {
+                const d = save()
+                const shareStr = getDungeonStr(d)
+                openPrompt<null>(() => div({ className: 'share-code' }, shareStr))
+            },
+        },
+        {
+            label: 'Exit Editor',
+            action: () => {
+                location.assign(`#/`)
+            },
+        },
+    ])
 }
