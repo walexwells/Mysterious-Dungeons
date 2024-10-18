@@ -185,7 +185,7 @@ describe('df elements', () => {
             const value = Dynamic('one')
 
             // act
-            const el = input({ value: value, onChange: (e) => value.set(el.value) })
+            const el = input({ value: value, onChange: () => value.set(el.value) })
 
             // assert
             expect(el.value).toBe('one')
