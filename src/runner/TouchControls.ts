@@ -1,4 +1,4 @@
-import { div } from '../libs/df/elements'
+import { div } from '../libs/df'
 import { createStyle, css } from '../utils/css'
 import { GameAction } from './GameState'
 

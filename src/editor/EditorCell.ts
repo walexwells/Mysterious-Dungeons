@@ -1,6 +1,7 @@
 import { gridCellSize } from '../data/constants'
-import { div } from '../libs/df/elements'
+
 import { tileList } from '../data/tileList'
+import { div } from '../libs/df'
 import { drawTile } from '../utils/drawTile'
 import { EditorSession } from './EditorSession'
 
@@ -16,8 +17,8 @@ export function EditorCell(tileIndex: number, editorSession: EditorSession) {
             top: y * gridCellSize + 'px',
             left: x * gridCellSize + 'px',
         },
-        onmouseenter: () => editorSession.painting && editorSession.paintTile(tileIndex),
-        onclick: () => editorSession.paintTile(tileIndex),
+        onMouseenter: () => editorSession.painting && editorSession.paintTile(tileIndex),
+        onClick: () => editorSession.paintTile(tileIndex),
         onDisconnected: () => unsubscribe(),
     })
 

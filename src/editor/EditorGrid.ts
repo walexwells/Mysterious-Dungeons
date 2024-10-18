@@ -1,5 +1,5 @@
 import { gridCellSize } from '../data/constants'
-import { div } from '../libs/df/elements'
+import { div } from '../libs/df'
 import { EditorCell } from './EditorCell'
 import { EditorSession } from './EditorSession'
 

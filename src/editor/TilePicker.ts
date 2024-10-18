@@ -1,5 +1,5 @@
 import { gridCellSize } from '../data/constants'
-import { div } from '../libs/df/elements'
+import { div } from '../libs/df'
 import { Tile, tileList } from '../data/tileList'
 import { drawTile } from '../utils/drawTile'
 import { EditorSession } from './EditorSession'
@@ -45,7 +45,7 @@ function PickerTile(tile: Tile) {
 function TilePickerRecord(tile: Tile, select: (tileEl: HTMLElement, tile: Tile) => void) {
     const tileEl = PickerTile(tile)
     return div(
-        { className: 'tile-picker-record', onclick: () => select(tileEl, tile) },
+        { className: 'tile-picker-record', onClick: () => select(tileEl, tile) },
         tileEl,
         div(tile.label)
     )

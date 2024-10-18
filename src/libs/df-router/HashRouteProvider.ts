@@ -1,5 +1,5 @@
 import { DfNode } from '../df/DfNode'
-import { div } from '../df/elements'
+import { div } from '../df'
 import { Dynamic } from '../dynamics/DynamicValue'
 import { DynamicGetter } from '../dynamics/types'
 import { routeContext } from './routeContext'
@@ -35,9 +35,9 @@ export function HashRouteProvider(...children: DfNode[]) {
 
     const hashChangeProvider = div(
         {
-            onConnected,
-            onDisconnected,
-            context: (x) => x.provide(routeContext, route),
+            onConnected: onConnected,
+            onDisconnected: onDisconnected,
+            provideContext: [routeContext, route],
         },
         ...children
     ) as IHashRouteProvider

@@ -1,4 +1,4 @@
-import { div, button } from '../libs/df/elements'
+import { div, button } from '../libs/df'
 import { createStyle, css } from '../utils/css'
 import { EditorGrid } from './EditorGrid'
 import { EditorSession } from './EditorSession'

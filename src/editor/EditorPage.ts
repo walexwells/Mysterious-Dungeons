@@ -1,7 +1,7 @@
 import { deleteDungeon, getDungeon, getDungeonKey, saveDungeon } from '../data/dungeonStorage'
 import { getDungeonStr } from '../data/dungeonStr'
 import { Header } from '../utils/Header'
-import { div, form, h2, input, label } from '../libs/df/elements'
+import { div, form, h2, input, label } from '../libs/df'
 import { openPrompt } from '../utils/prompt'
 import { selectDungeon } from '../menu/selectDungeon'
 import { ActionList } from './ActionList'
@@ -90,5 +90,10 @@ function DungeonNameForm(editorSession: EditorSession) {
     const name = Dynamic(editorSession.name)
     name.onChange((x) => editorSession.setName(x))
     editorSession.changes.subscribe((x) => x.name !== name.get() && name.set(x.name))
-    return form(label('Dungeon name: ', input({ name: 'dungeonName', value: name })))
+    const inputEl = input({
+        name: 'dungeonName',
+        value: name,
+        onChange: () => name.set(inputEl.value),
+    })
+    return form(label('Dungeon name: ', inputEl))
 }

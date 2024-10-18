@@ -1,114 +1,228 @@
-import { createDfElementFactory } from "./createElementFunc";
+import { createDfElementFactory } from './createDfElementFactory'
 
-export const a = createDfElementFactory("a");
-export const abbr = createDfElementFactory("abbr");
-export const address = createDfElementFactory("address");
-export const area = createDfElementFactory("area");
-export const article = createDfElementFactory("article");
-export const aside = createDfElementFactory("aside");
-export const audio = createDfElementFactory("audio");
-export const b = createDfElementFactory("b");
-export const base = createDfElementFactory("base");
-export const bdi = createDfElementFactory("bdi");
-export const bdo = createDfElementFactory("bdo");
-export const blockquote = createDfElementFactory("blockquote");
-export const body = createDfElementFactory("body");
-export const br = createDfElementFactory("br");
-export const button = createDfElementFactory("button");
-export const canvas = createDfElementFactory("canvas");
-export const caption = createDfElementFactory("caption");
-export const cite = createDfElementFactory("cite");
-export const code = createDfElementFactory("code");
-export const col = createDfElementFactory("col");
-export const colgroup = createDfElementFactory("colgroup");
-export const data = createDfElementFactory("data");
-export const datalist = createDfElementFactory("datalist");
-export const dd = createDfElementFactory("dd");
-export const del = createDfElementFactory("del");
-export const details = createDfElementFactory("details");
-export const dfn = createDfElementFactory("dfn");
-export const dialog = createDfElementFactory("dialog");
-export const div = createDfElementFactory("div");
-export const dl = createDfElementFactory("dl");
-export const dt = createDfElementFactory("dt");
-export const em = createDfElementFactory("em");
-export const embed = createDfElementFactory("embed");
-export const fieldset = createDfElementFactory("fieldset");
-export const figcaption = createDfElementFactory("figcaption");
-export const figure = createDfElementFactory("figure");
-export const footer = createDfElementFactory("footer");
-export const form = createDfElementFactory("form");
-export const h1 = createDfElementFactory("h1");
-export const h2 = createDfElementFactory("h2");
-export const h3 = createDfElementFactory("h3");
-export const h4 = createDfElementFactory("h4");
-export const h5 = createDfElementFactory("h5");
-export const h6 = createDfElementFactory("h6");
-export const head = createDfElementFactory("head");
-export const header = createDfElementFactory("header");
-export const hgroup = createDfElementFactory("hgroup");
-export const hr = createDfElementFactory("hr");
-export const html = createDfElementFactory("html");
-export const i = createDfElementFactory("i");
-export const iframe = createDfElementFactory("iframe");
-export const img = createDfElementFactory("img");
-export const input = createDfElementFactory("input");
-export const ins = createDfElementFactory("ins");
-export const kbd = createDfElementFactory("kbd");
-export const label = createDfElementFactory("label");
-export const legend = createDfElementFactory("legend");
-export const li = createDfElementFactory("li");
-export const link = createDfElementFactory("link");
-export const main = createDfElementFactory("main");
-export const map = createDfElementFactory("map");
-export const mark = createDfElementFactory("mark");
-export const menu = createDfElementFactory("menu");
-export const meta = createDfElementFactory("meta");
-export const meter = createDfElementFactory("meter");
-export const nav = createDfElementFactory("nav");
-export const noscript = createDfElementFactory("noscript");
-export const objectEl = createDfElementFactory("object");
-export const ol = createDfElementFactory("ol");
-export const optgroup = createDfElementFactory("optgroup");
-export const option = createDfElementFactory("option");
-export const output = createDfElementFactory("output");
-export const p = createDfElementFactory("p");
-export const picture = createDfElementFactory("picture");
-export const pre = createDfElementFactory("pre");
-export const progress = createDfElementFactory("progress");
-export const q = createDfElementFactory("q");
-export const rp = createDfElementFactory("rp");
-export const rt = createDfElementFactory("rt");
-export const ruby = createDfElementFactory("ruby");
-export const s = createDfElementFactory("s");
-export const samp = createDfElementFactory("samp");
-export const script = createDfElementFactory("script");
-export const search = createDfElementFactory("search");
-export const section = createDfElementFactory("section");
-export const select = createDfElementFactory("select");
-export const slot = createDfElementFactory("slot");
-export const small = createDfElementFactory("small");
-export const source = createDfElementFactory("source");
-export const span = createDfElementFactory("span");
-export const strong = createDfElementFactory("strong");
-export const style = createDfElementFactory("style");
-export const sub = createDfElementFactory("sub");
-export const summary = createDfElementFactory("summary");
-export const sup = createDfElementFactory("sup");
-export const table = createDfElementFactory("table");
-export const tbody = createDfElementFactory("tbody");
-export const td = createDfElementFactory("td");
-export const template = createDfElementFactory("template");
-export const textarea = createDfElementFactory("textarea");
-export const tfoot = createDfElementFactory("tfoot");
-export const th = createDfElementFactory("th");
-export const thead = createDfElementFactory("thead");
-export const time = createDfElementFactory("time");
-export const title = createDfElementFactory("title");
-export const tr = createDfElementFactory("tr");
-export const track = createDfElementFactory("track");
-export const u = createDfElementFactory("u");
-export const ul = createDfElementFactory("ul");
-export const varEl = createDfElementFactory("var");
-export const video = createDfElementFactory("video");
-export const wbr = createDfElementFactory("wbr");
+export const df = {
+    a: createDfElementFactory('a'),
+    abbr: createDfElementFactory('abbr'),
+    address: createDfElementFactory('address'),
+    area: createDfElementFactory('area'),
+    article: createDfElementFactory('article'),
+    aside: createDfElementFactory('aside'),
+    audio: createDfElementFactory('audio'),
+    b: createDfElementFactory('b'),
+    base: createDfElementFactory('base'),
+    bdi: createDfElementFactory('bdi'),
+    bdo: createDfElementFactory('bdo'),
+    blockquote: createDfElementFactory('blockquote'),
+    body: createDfElementFactory('body'),
+    br: createDfElementFactory('br'),
+    button: createDfElementFactory('button'),
+    canvas: createDfElementFactory('canvas'),
+    caption: createDfElementFactory('caption'),
+    cite: createDfElementFactory('cite'),
+    code: createDfElementFactory('code'),
+    col: createDfElementFactory('col'),
+    colgroup: createDfElementFactory('colgroup'),
+    data: createDfElementFactory('data'),
+    datalist: createDfElementFactory('datalist'),
+    dd: createDfElementFactory('dd'),
+    del: createDfElementFactory('del'),
+    details: createDfElementFactory('details'),
+    dfn: createDfElementFactory('dfn'),
+    dialog: createDfElementFactory('dialog'),
+    div: createDfElementFactory('div'),
+    dl: createDfElementFactory('dl'),
+    dt: createDfElementFactory('dt'),
+    em: createDfElementFactory('em'),
+    embed: createDfElementFactory('embed'),
+    fieldset: createDfElementFactory('fieldset'),
+    figcaption: createDfElementFactory('figcaption'),
+    figure: createDfElementFactory('figure'),
+    footer: createDfElementFactory('footer'),
+    form: createDfElementFactory('form'),
+    h1: createDfElementFactory('h1'),
+    h2: createDfElementFactory('h2'),
+    h3: createDfElementFactory('h3'),
+    h4: createDfElementFactory('h4'),
+    h5: createDfElementFactory('h5'),
+    h6: createDfElementFactory('h6'),
+    head: createDfElementFactory('head'),
+    header: createDfElementFactory('header'),
+    hgroup: createDfElementFactory('hgroup'),
+    hr: createDfElementFactory('hr'),
+    html: createDfElementFactory('html'),
+    i: createDfElementFactory('i'),
+    iframe: createDfElementFactory('iframe'),
+    img: createDfElementFactory('img'),
+    input: createDfElementFactory('input'),
+    ins: createDfElementFactory('ins'),
+    kbd: createDfElementFactory('kbd'),
+    label: createDfElementFactory('label'),
+    legend: createDfElementFactory('legend'),
+    li: createDfElementFactory('li'),
+    link: createDfElementFactory('link'),
+    main: createDfElementFactory('main'),
+    map: createDfElementFactory('map'),
+    mark: createDfElementFactory('mark'),
+    menu: createDfElementFactory('menu'),
+    meta: createDfElementFactory('meta'),
+    meter: createDfElementFactory('meter'),
+    nav: createDfElementFactory('nav'),
+    noscript: createDfElementFactory('noscript'),
+    object: createDfElementFactory('object'),
+    ol: createDfElementFactory('ol'),
+    optgroup: createDfElementFactory('optgroup'),
+    option: createDfElementFactory('option'),
+    output: createDfElementFactory('output'),
+    p: createDfElementFactory('p'),
+    picture: createDfElementFactory('picture'),
+    pre: createDfElementFactory('pre'),
+    progress: createDfElementFactory('progress'),
+    q: createDfElementFactory('q'),
+    rp: createDfElementFactory('rp'),
+    rt: createDfElementFactory('rt'),
+    ruby: createDfElementFactory('ruby'),
+    s: createDfElementFactory('s'),
+    samp: createDfElementFactory('samp'),
+    script: createDfElementFactory('script'),
+    search: createDfElementFactory('search'),
+    section: createDfElementFactory('section'),
+    select: createDfElementFactory('select'),
+    slot: createDfElementFactory('slot'),
+    small: createDfElementFactory('small'),
+    source: createDfElementFactory('source'),
+    span: createDfElementFactory('span'),
+    strong: createDfElementFactory('strong'),
+    style: createDfElementFactory('style'),
+    sub: createDfElementFactory('sub'),
+    summary: createDfElementFactory('summary'),
+    sup: createDfElementFactory('sup'),
+    table: createDfElementFactory('table'),
+    tbody: createDfElementFactory('tbody'),
+    td: createDfElementFactory('td'),
+    template: createDfElementFactory('template'),
+    textarea: createDfElementFactory('textarea'),
+    tfoot: createDfElementFactory('tfoot'),
+    th: createDfElementFactory('th'),
+    thead: createDfElementFactory('thead'),
+    time: createDfElementFactory('time'),
+    title: createDfElementFactory('title'),
+    tr: createDfElementFactory('tr'),
+    track: createDfElementFactory('track'),
+    u: createDfElementFactory('u'),
+    ul: createDfElementFactory('ul'),
+    var: createDfElementFactory('var'),
+    video: createDfElementFactory('video'),
+    wbr: createDfElementFactory('wbr'),
+}
+
+export const a = df.a
+export const abbr = df.abbr
+export const address = df.address
+export const area = df.area
+export const article = df.article
+export const aside = df.aside
+export const audio = df.audio
+export const b = df.b
+export const base = df.base
+export const bdi = df.bdi
+export const bdo = df.bdo
+export const blockquote = df.blockquote
+export const body = df.body
+export const br = df.br
+export const button = df.button
+export const canvas = df.canvas
+export const caption = df.caption
+export const cite = df.cite
+export const code = df.code
+export const col = df.col
+export const colgroup = df.colgroup
+export const data = df.data
+export const datalist = df.datalist
+export const dd = df.dd
+export const del = df.del
+export const details = df.details
+export const dfn = df.dfn
+export const dialog = df.dialog
+export const div = df.div
+export const dl = df.dl
+export const dt = df.dt
+export const em = df.em
+export const embed = df.embed
+export const fieldset = df.fieldset
+export const figcaption = df.figcaption
+export const figure = df.figure
+export const footer = df.footer
+export const form = df.form
+export const h1 = df.h1
+export const h2 = df.h2
+export const h3 = df.h3
+export const h4 = df.h4
+export const h5 = df.h5
+export const h6 = df.h6
+export const head = df.head
+export const header = df.header
+export const hgroup = df.hgroup
+export const hr = df.hr
+export const html = df.html
+export const i = df.i
+export const iframe = df.iframe
+export const img = df.img
+export const input = df.input
+export const ins = df.ins
+export const kbd = df.kbd
+export const label = df.label
+export const legend = df.legend
+export const li = df.li
+export const link = df.link
+export const main = df.main
+export const map = df.map
+export const mark = df.mark
+export const menu = df.menu
+export const meta = df.meta
+export const meter = df.meter
+export const nav = df.nav
+export const noscript = df.noscript
+export const object = df.object
+export const ol = df.ol
+export const optgroup = df.optgroup
+export const option = df.option
+export const output = df.output
+export const p = df.p
+export const picture = df.picture
+export const pre = df.pre
+export const progress = df.progress
+export const q = df.q
+export const rp = df.rp
+export const rt = df.rt
+export const ruby = df.ruby
+export const s = df.s
+export const samp = df.samp
+export const script = df.script
+export const search = df.search
+export const section = df.section
+export const select = df.select
+export const slot = df.slot
+export const small = df.small
+export const source = df.source
+export const span = df.span
+export const strong = df.strong
+export const style = df.style
+export const sub = df.sub
+export const summary = df.summary
+export const sup = df.sup
+export const table = df.table
+export const tbody = df.tbody
+export const td = df.td
+export const template = df.template
+export const textarea = df.textarea
+export const tfoot = df.tfoot
+export const th = df.th
+export const thead = df.thead
+export const time = df.time
+export const title = df.title
+export const tr = df.tr
+export const track = df.track
+export const u = df.u
+export const ul = df.ul
+export const video = df.video
+export const wbr = df.wbr
