@@ -11,48 +11,60 @@ export function MainPage() {
         Header(),
         div(
             { className: 'main-page-content' },
-            ActionList({
-                async Play() {
-                    const result = await selectDungeon()
-                    if (result) {
-                        location.assign(`#/dungeon/${getDungeonKey(result)}`)
-                    }
+            ActionList([
+                {
+                    label: 'Play',
+                    action: async () => {
+                        const result = await selectDungeon()
+                        if (result) {
+                            location.assign(`#/dungeon/${getDungeonKey(result)}`)
+                        }
+                    },
                 },
-                Create() {
-                    location.assign(`#/edit/`)
+                {
+                    label: 'Create',
+                    action: () => {
+                        location.assign(`#/edit/`)
+                    },
                 },
-                async Edit() {
-                    const result = await selectDungeon()
-                    if (result) {
-                        location.assign(`#/edit/${getDungeonKey(result)}`)
-                    }
+                {
+                    label: 'Edit',
+                    action: async () => {
+                        const result = await selectDungeon()
+                        if (result) {
+                            location.assign(`#/edit/${getDungeonKey(result)}`)
+                        }
+                    },
                 },
-                async Import() {
-                    openPrompt((resolve) => {
-                        const inputEl = input()
-                        return div(
-                            div(label('Dungeon share code:', inputEl)),
-                            div(
-                                button(
-                                    {
-                                        onClick: () => {
-                                            resolve(null)
-                                            try {
-                                                const dungeon = getDungeonFromStr(inputEl.value)
-                                                const saved = saveDungeon(dungeon)
-                                                openAlert(`Import Successful: ${saved.name}`)
-                                            } catch {
-                                                openAlert('Import Failed')
-                                            }
+                {
+                    label: 'Import',
+                    action: async () => {
+                        openPrompt((resolve) => {
+                            const inputEl = input()
+                            return div(
+                                div(label('Dungeon share code:', inputEl)),
+                                div(
+                                    button(
+                                        {
+                                            onClick: () => {
+                                                resolve(null)
+                                                try {
+                                                    const dungeon = getDungeonFromStr(inputEl.value)
+                                                    const saved = saveDungeon(dungeon)
+                                                    openAlert(`Import Successful: ${saved.name}`)
+                                                } catch {
+                                                    openAlert('Import Failed')
+                                                }
+                                            },
                                         },
-                                    },
-                                    'Import'
+                                        'Import'
+                                    )
                                 )
                             )
-                        )
-                    })
+                        })
+                    },
                 },
-            })
+            ])
         )
     )
 }

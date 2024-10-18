@@ -39,47 +39,65 @@ export function EditorPage(initialDungeonName?: string) {
             { className: 'dungeon-editor' },
             leftPanel,
             div(dungeonEditorGridEl),
-            ActionList({
-                'Save & Play': () => {
-                    const dungeon = save()
-                    if (dungeon.name) {
-                        location.assign(`#/dungeon/${getDungeonKey(dungeon.name)}`)
-                    }
+            ActionList([
+                {
+                    label: 'Save & Play',
+                    action: () => {
+                        const dungeon = save()
+                        if (dungeon.name) {
+                            location.assign(`#/dungeon/${getDungeonKey(dungeon.name)}`)
+                        }
+                    },
                 },
-                Load: async () => {
-                    const dungeon = await selectDungeon()
-                    if (dungeon) {
-                        location.assign('#/edit/' + getDungeonKey(dungeon))
-                    }
+                {
+                    label: 'Load',
+                    action: async () => {
+                        const dungeon = await selectDungeon()
+                        if (dungeon) {
+                            location.assign('#/edit/' + getDungeonKey(dungeon))
+                        }
+                    },
                 },
-                Save: () => {
-                    const dungeon = save()
-                    if (dungeon.name) {
-                        location.assign('#/edit/' + getDungeonKey(dungeon.name))
-                    }
+                {
+                    label: 'Save',
+                    action: () => {
+                        const dungeon = save()
+                        if (dungeon.name) {
+                            location.assign('#/edit/' + getDungeonKey(dungeon.name))
+                        }
+                    },
                 },
-                Delete: async () => {
-                    const result = await openPrompt<boolean>({
-                        message: 'Are you sure you want to delete this dungeon?',
-                        options: [
-                            { label: 'Cancel', value: false },
-                            { label: 'Delete', value: true, color: 'red' },
-                        ],
-                    })
-                    if (result) {
-                        deleteDungeon(getDungeonKey(getDungeonName()))
+                {
+                    label: 'Delete',
+                    action: async () => {
+                        const result = await openPrompt<boolean>({
+                            message: 'Are you sure you want to delete this dungeon?',
+                            options: [
+                                { label: 'Cancel', value: false },
+                                { label: 'Delete', value: true, color: 'red' },
+                            ],
+                        })
+                        if (result) {
+                            deleteDungeon(getDungeonKey(getDungeonName()))
+                            location.assign(`#/`)
+                        }
+                    },
+                },
+                {
+                    label: 'Get Share Code',
+                    action: () => {
+                        const d = save()
+                        const shareStr = getDungeonStr(d)
+                        openPrompt<null>(() => div({ className: 'share-code' }, shareStr))
+                    },
+                },
+                {
+                    label: 'Exit Editor',
+                    action: () => {
                         location.assign(`#/`)
-                    }
+                    },
                 },
-                'Get Share Code': () => {
-                    const d = save()
-                    const shareStr = getDungeonStr(d)
-                    openPrompt<null>(() => div({ className: 'share-code' }, shareStr))
-                },
-                'Exit Editor': () => {
-                    location.assign(`#/`)
-                },
-            })
+            ])
         )
     )
     editorSession.changes.publish(editorSession)

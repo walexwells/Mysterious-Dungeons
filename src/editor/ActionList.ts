@@ -1,13 +1,18 @@
 import { button, div } from '../libs/df'
+import { DynamicGetter } from '../libs/dynamics/types'
 
-export interface Actions {
-    [key: string]: () => void
+interface Action {
+    label: string
+    action: () => void
+    disabled?: DynamicGetter<boolean>
+    hoverText?: string
 }
-export function ActionList(actions: Actions) {
+
+export function ActionList(actions: Action[]) {
     return div(
         { className: 'action-list' },
-        ...Object.keys(actions).map((actionName) =>
-            button({ className: 'action', onClick: () => actions[actionName]() }, actionName)
+        ...actions.map(({ label, action, disabled, hoverText }) =>
+            button({ className: 'action', onClick: action, title: hoverText, disabled }, label)
         )
     )
 }

@@ -36,10 +36,16 @@ export function DungeonPage(dungeonName: string) {
             { className: 'DungeonPage-Content' },
             div(GameGrid(game), GameInfoPanel(game)),
             div(
-                ActionList({
-                    Restart: () => location.reload(),
-                    Exit: () => location.assign('#/'),
-                }),
+                ActionList([
+                    {
+                        label: 'Restart',
+                        action: () => location.reload(),
+                    },
+                    {
+                        label: 'Exit',
+                        action: () => location.assign('#/'),
+                    },
+                ]),
                 TouchControls(game.doAction)
             )
         )
